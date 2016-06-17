@@ -1,0 +1,33 @@
+{% extends 'base.html'%}
+{%block titleblock %} Login {% endblock %}
+
+{%block sitemast%}
+<div class="wrapper">
+	<div class="header header-filter .warning" style="background-image: url('assets/img/bg2.jpeg');">
+		<div class="container ">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="brand">
+                       <form id = "login_form" method = "post" action = "/login/">
+        <p>{% csrf_token %}</p>                
+        <p> Username:    
+          <input type ="text" name = "username" value = "" size ="50" />
+          <br/>
+          Password :        
+          <input type = "password" name = "password" value = "" size = "50"/>
+        </p>
+        <p><br/>
+          <input type = "submit" name = "Login" value = "Login"/>
+        </p>
+    </form>
+	<button class="btn btn-primary btn-raised btn-fab btn-fab-mini btn-round" href = "/">
+	<i class="material-icons">home</i>
+</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,270 @@
+{% extends 'dashboardbase.html'%}
+
+{% block requests %}active{% endblock %}
+{% block lrequests %}#{% endblock %}
+{%block head%}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+{%endblock%}
+{%block body%}
+	
+
+
+<div class="wrapper">
+<div class="container-fluid">
+<div class="row">
+<script type="text/javascript">
+dec=""
+id=""
+$(document).ready(function(){
+    
+    $(".anr.complete").click(function(){
+
+   $('.confirmreq').attr('id',$(this).attr('id'))
+   $('.confirmreq').attr('data-act',"User Complete")
+   $('.feedbacksub').attr('id',$(this).attr('id'))
+    })
+$(".anr.abort").click(function(){
+
+   $('.confirmreq').attr('id',$(this).attr('id'))
+   $('.confirmreq').attr('data-act',"User Abort")
+    })
+
+    $(".confirmreq").click(function(){
+    var element =this
+    $.ajax({
+        url : "/", // the endpoint
+        type : "POST", // http method
+        data : { dec : $(this).attr('data-act'), id:$(this).attr('id')}, // data sent with the post request
+
+        // handle a successful response
+        success : function(res) {
+            $("#confirm").modal("hide")
+             $("#r"+$(element).attr('id')).css("display","none")   
+               
+            if ($(element).attr('data-act') == "User Complete")
+                {   $("#feedback").modal('show')
+                }                 
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+      });
+    })
+
+   $(".feedbacksub").click(function(){
+    var element =this
+    $.ajax({
+        url : "/home/volunteer/", // the endpoint
+        type : "POST", // http method
+        data : { id : $(this).attr('id'), feedback_user:$("#feedbacktext").val(),feedback_userrating:$("#feedbackrating").val()}, // data sent with the post request
+
+        // handle a successful response
+        success : function(res) {
+            $("#feedback").modal("hide")
+                            
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+  });
+     
+});
+
+</script>
+<div class = "container">
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern"> Upcoming Requests </div>
+<div class = "content">
+{% if is_upcomingrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Sent at</b></td>
+        <td><b>NGO</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+        <td><b>Actions</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in upcoming_requests %}
+    <tr id = "r{{req.id}}">
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+        <td id={{req.id}} class="anrg td-actions text-right">
+                <button id= {{req.id}} class="anr abort btn btn-danbtn-raised btn-fab btn-fab-mini btn-round" data-toggle="modal" data-target="#confirm" rel = "tooltip" title = "Cancel">
+                Cancel
+                </button> 
+        </td>
+    </tr>
+    {% endfor %}        
+    </tbody>
+    </table>
+    </div>
+{% else %}
+    <h2>No upcoming requests</h2>
+{%endif%}
+    </div>
+    </div>
+    </div>
+    </div>
+
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern"> Ongoing Requests </div>
+<div class = "content">
+{% if is_ongoingrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Sent at</b></td>
+        <td><b>NGO</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+        <td><b>Actions</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in ongoing_requests %}
+    <tr id = "r{{req.id}}">
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+        <td id={{req.id}} class="anrg td-actions text-right">
+                 <button id= {{req.id}} class="anr complete btn btn-danbtn-raised btn-fab btn-fab-mini btn-round" data-toggle="modal" data-target="#confirm" rel = "tooltip" title = "Complete">
+                Complete
+                </button>
+        </td>
+    </tr>
+    {% endfor %}        
+</tbody>
+</table>
+</div>
+   
+{% else %}
+    <h2>No ongoing requests</h2>
+
+{%endif%}
+</div>
+</div>
+</div>
+</div>
+
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern"> Pending Requests </div>
+<div class = "content">
+{% if is_pendingrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Sent at</b></td>
+        <td><b>NGO</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+        <td><b>Actions</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in pending_requests %}
+    <tr id = "r{{req.id}}">
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+        <td id={{req.id}} class="anrg td-actions text-right">
+                <button id= {{req.id}} class="anr abort btn btn-danbtn-raised btn-fab btn-fab-mini btn-round" data-toggle="modal" data-target="#confirm" rel = "tooltip" title = "Cancel">
+                Cancel
+                </button> 
+        </td>
+    </tr>
+    {% endfor %}        
+ </tbody>
+ </table>
+ </div>
+
+{% else %}
+    <h2>No upcoming requests</h2>
+{%endif%}
+</div>
+</div>
+</div>
+</div>
+</div>
+
+{%endblock%}
+{% block modal %}
+
+<div class="modal modal-small fade" id="confirm" tabindex="-1" role="dialog" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-center">Are you sure</h4>
+      </div>
+      <div class="modal-body">
+          <button id="" data-act="dfdf" class="confirmreq btn btn-info btn-fill btn-block"> Yes </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal modal-small fade" data-keyboard="false" data-backdrop="static" id="feedback" tabindex="-1" role="dialog" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-center">Feedback</h4>
+      </div>
+      <div class="modal-body">
+                        
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">Review</label>
+                   <input id="feedbacktext" type = "text" name ="feedback_user" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+                
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">Rating</label>
+                   <input id="feedbackrating" type = "number" name="feedback_userrating" min="1" max="5" class=" form-control" />
+                   </div>
+                </div>
+              </div>        
+                <div class = "row">
+                <div class="col-sm-4">
+                   
+              <button id="" data-act="dfdf" class="feedbacksub btn btn-info btn-fill btn-block"> Submit </button>                
+                </div>
+                </div>
+            
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%}

@@ -1,0 +1,69 @@
+{% extends 'base.html'%}
+
+        {%block title%} Register {%endblock%}
+    
+
+    {% block body %}
+    <script type="text/javascript">
+        alert({{array}})
+    </script>
+      <div class = " main-raised"> 
+        <div class = "container" style = "margin: 150px auto">
+        {% if registered %}
+        <h3 align = "center"><b><i>Thank you for registering</i></b></h3>
+        {% else %}
+        <h1 style = "margin: 30px 360px"><b>Register</b></h1>
+        <form id="user_form" method = "post" action="/register/ngoprofile/" enctype="multipart/form-data" >
+            {% csrf_token %}
+            
+            Set up your NGO
+            {% for field in profile_form %}
+            
+                <div class = "row">
+                <div class="col-sm-4 col-lg-offset-3" >
+                <div class="form-group label-floating">
+                <label class="control-label">{{ field.label }}</label>
+                {{ field }}
+                </div>
+                </div>
+                </div>
+                {% endfor %}
+                <div class = "row">
+                <div class="col-sm-4 col-lg-offset-3" >
+                <div class="form-group label-floating">
+                <label class="control-label">Ngo domain</label>
+                <select id="id_ngo_domain" name="ngo_domain">
+{% for option in array %}
+<option value="{{option.domain}}">{{option.domain}}</option>
+{% endfor %}
+</select>
+                </div>
+                </div>
+                </div>
+            
+           <div class = "row">
+                <div class="col-sm-4 col-lg-offset-3" >
+                <div class="form-group label-floating">
+                <label class="control-label">Interests</label>
+                {% for option in arrayact %}
+                <label class="checkbox checkbox-blue" for="checkbox1">
+
+                <input type="checkbox" name="activityname" value="{{option.activityname}}" id="checkbox1" data-toggle="checkbox">
+                {{option.activityname}}
+                </label>
+                {% endfor %}
+                </select>
+                </div>
+                </div>
+                </div>
+            <div class = "row">
+            <div class="col-sm-4 col-lg-offset-3" >
+            <input type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised"/>                   
+            </div>
+            </div>
+        </form>
+        
+        {% endif %}
+        </div>
+        </div>  
+        {%endblock%}

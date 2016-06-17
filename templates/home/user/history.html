@@ -1,0 +1,176 @@
+{% extends 'dashboardbase.html'%}
+
+{% block history %}active{% endblock %}
+{% block lhistory %}#{% endblock %}
+{%block body%}
+<div class = "wrapper">
+<div class = "container">
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern"> Completed Requests </div>
+<div class = "content">
+{% if is_completedrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Sent at</b></td>
+        <td><b>NGO</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+        <td><b>Actions</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in completed_requests %}
+    <tr>
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+    </tr>
+    {% endfor %}        
+    </tbody>
+    </table>
+    </div>
+{% else %}
+    <h2>No past completed requests</h2>
+{%endif%}
+    </div>
+    </div>
+    </div>
+    </div>
+
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern"> Requests cancelle by NGOs </div>
+<div class = "content">
+{% if is_ngo_cancelrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Sent at</b></td>
+        <td><b>NGO</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+        <td><b>Actions</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in ngocancel_requests %}
+    <tr>
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+    </tr>
+    {% endfor %}        
+    </tbody>
+    </table>
+    </div>
+{% else %}
+    <h2>No requests cancelled by NGOs. </h2>
+{%endif%}
+    </div>
+    </div>
+    </div>
+    </div>
+
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern"> Rejected Requests </div>
+<div class = "content">
+{% if is_rejectedrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Sent at</b></td>
+        <td><b>NGO</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+        <td><b>Actions</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in rejected_requests %}
+    <tr>
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+    </tr>
+    {% endfor %}        
+    </tbody>
+    </table>
+    </div>
+{% else %}
+    <h2>No past rejected requests</h2>
+{%endif%}
+    </div>
+    </div>
+    </div>
+    </div>
+    
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern"> Requests cancelled by you </div>
+<div class = "content">
+{% if is_user_cancelrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Sent at</b></td>
+        <td><b>NGO</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+        <td><b>Actions</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in usercancel_requests %}
+    <tr>
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+    </tr>
+    {% endfor %}        
+    </tbody>
+    </table>
+    </div>
+{% else %}
+    <h2>No past requests cancelled by you</h2>
+{%endif%}
+    </div>
+    </div>
+    </div>
+    </div>
+<footer class="footer footer-big">
+            <!-- .footer-black is another class for the footer, for the transparent version, we recommend you to change the url of the image with your favourite image.          -->
+
+            <div class="container">
+                <div class="copyright">
+                    &copy; 2016 YouTeach
+                </div>
+            </div>
+        </footer>
+</div>
+</div>
+
+{%endblock%}
+

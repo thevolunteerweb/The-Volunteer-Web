@@ -1,0 +1,163 @@
+{% extends 'ngodashboardbase.html'%}
+
+{% block history %}active{% endblock %}
+{% block lhistory %}#{% endblock %}
+{%block body%}
+<div class="wrapper">
+<div class = "container">
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern">Completed Requests </div>
+<div class = "content">
+{% if is_completedrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Received at</b></td>
+        <td><b>From</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in completed_requests %}
+     <tr>
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.sender}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+    </tr>
+    {% endfor %}        
+</tbody>
+</table>
+</div>   
+{% else %}
+    <h2>No past completed requests</h2>
+{%endif%}
+ </div>
+</div>
+</div>
+</div>
+
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern">Requests cancelled by Volunteers</div>
+<div class = "content">
+{% if is_user_cancelrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Received at</b></td>
+        <td><b>From</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in usercancel_requests %}
+     <tr>
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.sender}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+    </tr>
+    {% endfor %}        
+</tbody>
+</table>
+</div>   
+{% else %}
+    <h2>No past requests cancelled by volunteers </h2>
+{%endif%}
+ </div>
+</div>
+</div>
+</div>
+
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern">Rejected Requests</div>
+<div class = "content">
+{% if is_rejectedrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Received at</b></td>
+        <td><b>From</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in rejected_requests %}
+     <tr>
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.sender}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+    </tr>
+    {% endfor %}        
+</tbody>
+</table>
+</div>   
+{% else %}
+    <h2>No past requests rejected by your NGO</h2>
+{%endif%}
+ </div>
+</div>
+</div>
+</div> 
+
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern">Requests cancelled by your NGO</div>
+<div class = "content">
+{% if is_ngo_cancelrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Received at</b></td>
+        <td><b>From</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in ngocancel_requests %}
+     <tr>
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.sender}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+    </tr>
+    {% endfor %}        
+</tbody>
+</table>
+</div>   
+{% else %}
+    <h2>No past requests cancelled by your NGO</h2>
+{%endif%}
+ </div>
+</div>
+</div>
+</div>
+    
+</div>
+</div>
+{% endblock %}
+    

@@ -1,0 +1,419 @@
+{% extends 'ngodashboardbase.html'%}
+
+{% block balance %}active{% endblock %}
+{% block lbalance %}#{% endblock %}
+{%block body%}
+<script type="text/javascript">
+dec=""
+id=""
+
+$(document).ready(function(){
+    $("#label_input").css("display","none")
+    $("#output").css("display","none")
+    var a_switch
+    a_switch = 0
+    $("#toggleview").click(function(){
+        a_switch = 1 - a_switch
+        if(a_switch==0){
+            $("#input").fadeIn(200);
+            $("#output").fadeOut(200);
+            $("#label_input").css("display","none")
+            $("#label_output").css("display","block")
+          }
+          if(a_switch==1){
+            $("#input").fadeOut(200);
+            $("#output").fadeIn(200);
+            $("#label_input").css("display","block")
+            $("#label_output").css("display","none")
+          }
+  });
+
+    $("#offlinevolsub").click(function(){
+    var element =this
+    
+    $.ajax({
+        url : "/home/ngo/balance/", // the endpoint
+        type : "POST", // http method
+        data : { input_type: "offline_vol", id : $(this).attr('id'), volunteer_name:$("#volunteer_name").val(),activity:$("#activity").val(), hours_vol:$("#hours_vol").val(), date_vol:$("#date_vol").val(), time_vol:$("#time_vol").val()}, // data sent with the post request
+
+        // handle a successful response
+        success : function(result) {
+            rotateCard(element)
+            $('#offline_volform')[0].reset(); 
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+  });
+    
+    $("#offlinedonationsub").click(function(){
+    var element =this
+    $.ajax({
+        url : "/home/ngo/balance/", // the endpoint
+        type : "POST", // http method
+        data : { input_type: "offline_donations", id : $(this).attr('id'), donor_name:$("#donor_name").val(),cause:$("#cause").val(), amount_donated:$("#amount_donated").val(), date_donated:$("#date_donated").val(), mode_of_payment:$("#mode_of_payment").val()}, // data sent with the post request
+
+        // handle a successful response
+        success : function(res) {
+            rotateCard(element)
+            $('#offline_donationform')[0].reset();                             
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+  });
+    $("#expendituresub").click(function(){
+    var element =this
+    $.ajax({
+        url : "/home/ngo/balance/", // the endpoint
+        type : "POST", // http method
+        data : {input_type: "expenditure", id : $(this).attr('id'), purpose:$("#purpose").val(), amount:$("#amount").val()},  // data sent with the post request
+
+        // handle a successful response
+        success : function(res) {
+            rotateCard(element)
+            $('#expenditure_form')[0].reset();                          
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+  });
+    
+$(".approve").click(function(){
+    var element =this
+    $.ajax({
+        url : "/", // the endpoint
+        type : "POST", // http method
+        data : { dec : "Approved", id:$(this).attr("id")}, // data sent with the post request
+
+        // handle a successful response
+        success : function(res) {
+            $(element).css("display","none")
+            $("td.status#"+$(element).attr("id")).html("Approved")
+            
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    }); 
+})
+
+$(".deny").click(function(){
+    var element =this
+    $.ajax({
+        url : "/", // the endpoint
+        type : "POST", // http method
+        data : { dec : "Denied", id:$(this).attr("id")}, // data sent with the post request
+
+        // handle a successful response
+        success : function(res) {
+            $(element).css("display","none")
+            $("td.status#"+$(element).attr("id")).html("Denied")
+            
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    }); 
+})     
+});
+</script>
+<div class="wrapper"> 
+<div class="container-fluid" >
+<div class="wrapper">  
+<div class = "row">
+    <div class = "col-md-2 col-md-offset-1">
+    <button id = "toggleview" class = "btn btn-filled btn-block"><div id = "label_input">View Input</div><div id = "label_output">View Output</div></button>
+    </div>
+</div>
+<div id = "input" class="row">
+    <div class = "col-md-4">
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            <form id = "offline_volform">
+            <div class="form-group">
+                 <input id="volunteer_name" type = "text" placeholder="Volunteer Name" name ="volunteer_name" class=" form-control" />
+            </div>
+            <div class="form-group">
+                 <input id="activity" type = "text" placeholder="Activity" name ="activity" class=" form-control" />
+             </div>
+            <div class="form-group label-floating">
+               <label class="control-label">Hours volunteered</label>
+               <input id="hours_vol" type = "number" name="hours_vol" min="1" max="12" class=" form-control" />
+            </div>
+            <div class="form-group label-floating">
+                <label class="control-label">Date of Volunteering</label>
+                 <input id="date_vol" type = "date" name ="date_vol" class=" form-control" />
+             </div>
+            <div class="form-group label-floating">
+                <label class="control-label">Time of Volunteering</label>
+                 <input id="time_vol" type = "time" name ="time_vol" class=" form-control" />
+             </div>
+            <button type="button" id="offlinevolsub" class="btn btn-info btn-fill btn-block">Submit</button>     
+            </form>
+            </div>       
+            </div>        
+            <div class = "back">
+            <div class = "content">
+            <h2>Your offline volunteering instance has been recorded succesfully!</h2>
+            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block"> Log another offline volunteering instance </button>
+            </div>
+        </div> 
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div>
+     <div class = "col-md-4">
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            <form id = "offline_donationform">
+            <div class="form-group">
+                 <input id="donor_name" type = "text" placeholder="Donor Name" name ="volunteer_name" class=" form-control" />
+            </div>
+            <div class="form-group">
+                 <input id="cause" type = "text" placeholder="For what cause was the donation made?" name ="activity" class=" form-control" />
+             </div>
+            <div class="form-group label-floating">
+               <label class="control-label">Amount Donated (in Rupees)</label>
+               <input id="amount_donated" type = "number" name="amount_donated" min="1" class="form-control" />
+            </div>                
+            <div class="form-group label-floating">
+                <label class="control-label">Date of Donation</label>
+                 <input id="date_donated" type = "date" name ="date_donated" class=" form-control" />
+             </div>
+            <div class="form-group">
+            <select id="mode_of_payment" name="mode_of_payment" class = "dropdown">
+                <option value="Cheque">Cheque</option>
+                <option value="Online Transfer">Online Transfer</option>
+                <option value="Cash">Cash</option>
+                <option value="Credit/Debit Card">Credit/Debit Card</option>
+              </select>
+            </div>
+            <button type="button" id="offlinedonationsub" class="btn btn-info btn-fill btn-block">Submit</button>     
+            </form>
+            </div>       
+            </div>        
+            <div class = "back">
+            <div class = "content">
+            <h2>The donation has been recorded succesfully!</h2>
+            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block"> Log another offline volunteering instance </button>
+            </div>
+            </div>
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div> 
+    
+        <div class = "col-md-4">
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            <form id = "expenditure_form">
+            <div class="form-group label-floating">
+               <label class="control-label">Amount Spent(in Rupees)</label>
+               <input id="amount" type = "number" name="amount" min="1" class="form-control" />
+            </div>
+            <div class="form-group">
+                 <input id="purpose" type = "text" placeholder="Purpose of the Expense" name ="purpose" class=" form-control" />
+            </div>
+            <button id="expendituresub" type="button" class="btn btn-info btn-fill btn-block">Submit</button>     
+            </form>
+            </div>       
+            </div>        
+            <div class = "back">
+            <div class = "content">
+            <h2>Your expense has been recorded succesfully!</h2>
+            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block"> Log another expense </button>
+            </div>
+            </div>
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div> 
+        </div>
+<div id = "output" class="row">
+    <div class = "col-md-10 col-md-offset-1">
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            {% if is_offlinevols %}
+            <div class = "table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <td><b>Logged at</b></td>
+                    <td><b>Volunteer Name</b>/b></td>
+                    <td><b>Date of volunteering</b></td>
+                    <td><b>Time of volunteering</b></td>
+                    <td><b>Activity</b></td>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for req in offline_vols %}
+                <tr>
+                    <td> {{req.date_time_req}} </td>
+                    <td> {{req.volunteer_name}} </td>
+                    <td> {{req.date_vol}}</td>
+                    <td> {{req.time_vol}}</td>
+                    <td> {{req.activity}}</td>
+                </tr>
+                {% endfor %}        
+            </tbody>
+            </table>
+            </div>   
+            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block">View a summary of your offline volunteering instances.</button>
+            {% else %}
+                <h2>No offline volunteering instances logged</h2>
+            {%endif%}            
+            </div>       
+            </div>        
+            <div class = "back">
+            <div class = "content">
+            <h2>Summary</h2>
+            <h3><b>Top Volunteer</b>: {{top_volunteer}}</h3>
+            <h3><b>Total Hours of Volunteering (Offline)</b>: {{total_offline_volhours}}</h3>                
+            </div>
+            </div> 
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div>
+     <div class = "col-md-10 col-md-offset-1">
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            {% if is_offlinedonations %}
+            <div class = "table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <td><b>Logged at</b></td>
+                    <td><b>Donor Name</b></td>
+                    <td><b>Date of Donation</b></td>
+                    <td><b>Cause</b></td>
+                    <td><b>Amount Donated</b></td>
+                    <td><b>Mode of Payment</b></td>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for req in offline_donations%}
+                <tr>
+                    <td> {{req.date_time_req}} </td>
+                    <td> {{req.donor_name}} </td>
+                    <td> {{req.date_donated}}</td>
+                    <td> {{req.cause}}</td>
+                    <td> {{req.amount_donated}}</td>
+                    <td> {{req.mode_of_payment}}</td>
+                </tr>
+                {% endfor %}        
+            </tbody>
+            </table>
+            </div>
+            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block">View a summary of your offline volunteering instances.</button>
+            {% else %}
+                <h2>No donations logged.</h2>
+            {%endif%}            
+            </div>       
+            </div>        
+            <div class = "back">
+            <div class = "content">
+            <h2>Summary</h2>
+            <h3><b>Top Donor</b>: {{top_donor}}</h3>
+            <h3><b>Total Amount Received in Donations</b>: {{total_offline_donation}}</h3>                
+            </div>
+            </div>
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div> 
+    
+        <div class = "col-md-10 col-md-offset-1">
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            {% if is_pendingexpenses %}
+            <div class = "table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <td><b>Logged at</b></td>
+                    <td><b>From</b></td>
+                    <td><b>Purpose of Expense</b></td>
+                    <td><b>Amount</b></td>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for req in pending_expenses %}
+                <tr>
+                    <td> {{req.date_time_req}} </td>
+                    <td> {{req.sender}} </td>
+                    <td> {{req.purpose}}</td>
+                    <td> {{req.amount}}</td>
+                    <td id={{req.id}} class="anrg td-actions text-right">
+                            <button id= {{req.id}} class="approve btn btn-success btn-raised btn-fab btn-fab-mini btn-round" rel = "tooltip" title = "Approve Expense">
+                            <i class="material-icons">thumb_up</i>
+                            </button>
+                            <button id= {{req.id}} class="deny btn btn-danger btn-raised btn-fab btn-fab-mini btn-round" rel = "tooltip" title = "Deny Expense">
+                            <i class="material-icons">thumb_down</i>
+                            </button> 
+                    </td>     
+                </tr>
+                {% endfor %}        
+            </tbody>
+            </table>
+            </div>   
+            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block"> View Expense History Summary</button>
+            {% else %}
+                <h2>No expenses pending approval.</h2>
+            {%endif%}            
+            </div>       
+            </div>        
+            <div class = "back">
+            <div class = "content">
+            {% if is_pastexpenses %}
+            <h2>Summary</h2>
+            <h3><b>Total Expenditure</b>: {{total_expenditure}}</h3>
+            <h3><b>Net Income</b>: {{net_income}}</h3>  
+            
+            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block"> View New Expenses </button>
+            <button type="button" href="/home/ngo/history" class="btn btn-info btn-fill btn-block"> View Expense History in more detail </button>
+            {% else %}
+                <h2>No past expenses to show.</h2>
+            {%endif%}
+            </div>
+            </div> 
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div>
+    </div>
+</div>
+   
+    </div>
+     
+    <footer class="footer footer-big">
+            <!-- .footer-black is another class for the footer, for the transparent version, we recommend you to change the url of the image with your favourite image.          -->
+
+            <div class="container">
+                
+            </div>
+        </footer>
+</div>
+
+{%endblock%}
+{%block footer%}{%endblock%}

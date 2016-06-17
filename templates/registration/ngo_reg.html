@@ -1,0 +1,51 @@
+{% extends 'base.html'%}
+
+        {%block title%} Register {%endblock%}
+    
+
+    {% block body %}
+      <div class = " main-raised"> 
+        <div class = "container" style = "margin: 150px auto">
+        {% if registered %}
+        <h3 align = "center"><b><i>Thank you for registering</i></b></h3>
+        {% else %}
+        <h1 style = "margin: 30px 360px"><b>Register</b></h1>
+        <form id="user_form" method = "post" action="/register/ngo/" enctype="multipart/form-data" >
+            {% csrf_token %}
+            {% for field in user_form %}
+            
+                <div class = "row">
+                <div class="col-sm-4 col-lg-offset-3" >
+                <div class="form-group label-floating">
+                <label class="control-label">{{ field.label }}</label>
+                {{ field }}
+                </div>
+                </div>
+                </div>
+             
+                {% endfor %}
+            Set up your NGO
+            {% for field in profile_form %}
+            
+                <div class = "row">
+                <div class="col-sm-4 col-lg-offset-3" >
+                <div class="form-group label-floating">
+                <label class="control-label">{{ field.label }}</label>
+                {{ field }}
+                </div>
+                </div>
+                </div>
+                {% endfor %}
+            
+           
+            <div class = "row">
+            <div class="col-sm-4 col-lg-offset-3" >
+            <input type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised"/>                   
+            </div>
+            </div>
+        </form>
+        
+        {% endif %}
+        </div>
+        </div>  
+        {%endblock%}

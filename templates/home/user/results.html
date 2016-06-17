@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}<br><br><br><br><br><br><br><br><br><br><br>
+                <div class = "row">
+                <div class="col-sm-4 col-lg-offset-3" >
+                <div class="form-group label-floating">
+                <label class="control-label">Search for NGOs</label>
+                    <input placeholder="Stupid search bar ha..." width="100" type="text" id="search">
+                </div>
+                </div>  
+                </div>
+
+<div id="result"></div>
+<script type="text/javascript">
+var respo
+$(document).ready(function(){
+	var element
+var a
+    $('#search').on('input',function(){
+    	
+        $.ajax({
+        url : "/home/search/", // the endpoint
+        type : "POST", // http method
+        data : { 'term' : $(this).val()}, // data sent with the post request
+
+        // handle a successful response
+        success : function(resp) {
+            
+            if(resp=="None"){
+                $("#result").html("Uh Oh! Looks like we couldn't find a match!")
+            }
+            else{
+                htm=`<div class = row>`
+                for (var i = 0; i < resp.length; i++) {
+                htm+=`<div class = "col-sm-3 col-lg-offset 3">
+                        <div class="card-container">
+                        <div class="card">
+                            <div class="front">
+                                <div class="cover">
+                                    <img src={% static 'assets/img/card-background.png' %} alt = "some background image"/>
+                                </div>
+                                <div class="user">
+                                    <img class="img-circle" src={% static 'assets/img/logo.png' %} alt = "Insert logo here"/>
+                                </div>
+                                <div class="content">
+                                    <div class="main">
+                                        <h3 class="name">`+resp[i].fields.ngo_name+`</h3>
+                                        <p class="text-center">`+resp[i].fields.address+`</p>
+                                    </div>
+                                </div>
+                            </div> <!-- end front panel -->
+                            <div class="back">
+                                <div class="header">
+                                    <h5 class="motto">`+resp[i].fields.ngo_name+`</h5>
+                                </div>
+                                <div class="content">
+                                    <div class="main">
+                                        <h4 class="text-center">What we do / More about the NGO</h4>
+                                        <p class="text-center">Explain what NGO Does</p>
+                                    </div>
+                                    <div class="footer">
+                                        <button class="reqbut btn btn-primary btn-round" id="r`+resp[i].fields.ngo_id+`" data-toggle ="modal" data-target ="#volunteer_request">Volunteer Here</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end back panel -->
+                        </div> <!-- end card -->
+                    </div> <!-- end card-container -->`}
+              htm+=`</div>`             
+             $("#result").html(htm)
+            }
+            
+             },
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+             alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+        
+    });
+
+})
+    $(document).on('click','.reqbut',function(){
+        $('#ingoid').val($(this).attr('id').slice(1))
+    })      
+</script>
+
+{% endblock %}
+{% block modal %}
+<div class="modal fade" id="volunteer_request" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title" id="myModalLabel"><b>Volunteer at an NGO</b></h3>
+      </div>
+      <div class="modal-body">
+         <div class = "container">
+            <h4><b>Submit your volunteering request here</b></h4>
+             
+            <form id="request_form" method = "post" action="/request/volunteer/" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                   <input id="ingoid" type = "hidden" name = "recepient" class="form-control" />
+                   
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label"></label>
+                   <input type = "date" name = "date_time_vol" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">Duration of Volunteering (hours)</label>
+                   <input type = "number" name = "vol_duration" class=" form-control" min = "1" max = "12" />
+                   </div>
+                </div>
+                </div>                
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">Additional Details</label>
+                   <input type = "text" name = "additional_details" value = "" class="form-control" />
+                   </div>
+                </div>
+                </div>
+                <div class = "row">
+                <div class="col-sm-4">
+                   <input type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised"/>                   
+                </div>
+                </div>
+             </form>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

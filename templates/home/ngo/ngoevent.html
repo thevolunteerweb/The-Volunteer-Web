@@ -1,0 +1,118 @@
+{% extends 'ngodashboardbase.html'%}
+
+{% block event %}active{% endblock %}
+{% block levent %}#{% endblock %}
+{%block body%}
+<script type="text/javascript">
+dec=""
+id=""
+
+$(document).ready(function(){
+   
+    $("#eventsub").click(function(){
+    var element =this
+    a=[]
+    b=[]
+    $('.activities:checked').each(function(){
+        a.push($(this).val())
+
+        b.push($('[data-link="'+$(this).val()+'"]').val())    
+
+    })
+    alert(a)
+    alert(b)
+    alert($('#startdate_vol').val())
+    $.ajax({
+        url : "/home/ngo/event/", // the endpoint
+        type : "POST", // http method
+        data : { 'type': "event", 'event_name': $('#event_name').val(),'startdate_vol' : $('#startdate_vol').val(),'starttime_vol' : $('#starttime_vol').val(),'enddate_vol': $('#enddate_vol').val(),'endtime_vol': $('#endtime_vol').val(),'activities[]':a,'activity_goal[]':b},// data sent with the post request
+
+        // handle a successful response
+        success : function(result) {
+            alert("Hell yes")
+            alert(result)
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+  });
+    
+
+    
+});
+</script>
+<div class="wrapper">  
+<div class="container-fluid" >
+
+                <button id="eventsub" class="btn btn-default btn-raised btn-fill btn-info">Add</button>
+    <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">Name</label>
+                   <input type = "text" id= "event_name" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+    <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">Start Date</label>
+                   <input type = "date" id="startdate_vol" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">Start Time</label>
+                   <input type = "time" id= "starttime_vol" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">End Date</label>
+                   <input type = "date" id= "enddate_vol" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">End Time</label>
+                   <input type = "time" id= "endtime_vol" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+                {% for option in array %}
+                    <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+
+                <label class="checkbox checkbox-blue" for="checkbox1">
+
+                <input type="checkbox" name="activities" value="{{option.activityname}}" class="activities" data-toggle="checkbox">
+                   {{option.activityname}}
+                   </label>
+                   </div>
+                </div>
+
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">Volunteer goal</label>
+                   <input type = "number" data-link="{{option.activityname}}" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+                {% endfor %}
+
+
+</div>
+</div>
+{%endblock%}
+{%block footer%}
+{%endblock%}
