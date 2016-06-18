@@ -120,7 +120,7 @@ ajaxreq("")
   
       $('#actlist').append('<option value="'+respo[x].activity[i]+'">'+respo[x].activity[i]+'</option>')
 }
-if(respo[x].activity,length==0){
+if(respo[x].activity.length==0){
   $('#actlist').html('<option value="None">No activities</option>')
   $('#submitbut').prop('disabled',true)
 }
