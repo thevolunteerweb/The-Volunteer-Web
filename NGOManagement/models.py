@@ -5,7 +5,7 @@ class Offline_Vol(models.Model):
     date_time_req = models.DateTimeField(auto_now_add=True,null=True)
     ngo_id = models.TextField(max_length = 100, blank = False)
     volunteer_name = models.TextField(max_length = 100, blank = True)
-    date_vol = models.DateField(,null=True,blank=True)
+    date_vol = models.DateField(null=True,blank=True)
     time_vol = models.TimeField(blank=True)
     hours_vol = models.PositiveSmallIntegerField()
     activity = models.TextField(max_length = 100, blank = False)
