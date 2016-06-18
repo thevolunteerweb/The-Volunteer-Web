@@ -107,22 +107,43 @@ ajaxreq("")
           }
     })
         
-
+    $("#label_onetime").css("display","none")
+    a_switch = 0
+    $("#toggleview").click(function(){
+        a_switch = 1 - a_switch
+         if(a_switch == 0){
+            $("#eventreq").css("display","block")
+            $("#label_onetime").css("display","block")
+            $("#label_recur").css("display","none")
+            $("#recreq").css("display","none")
+          }
+          if(a_switch == 1){
+            $("#eventreq").css("display","none")
+            $("#label_recur").css("display","block")
+            $("#label_onetime").css("display","none")
+            $("#recreq").css("display","block")
+          }
+  });
 })
     $(document).on('click','.reqbut',function(){
         $('#ingoid').val($(this).attr('id').slice(1))
         
-  $('#actlist').html('')
+  $('#actlisto').html('')
+  $('#actlistr').html('')
   x=parseInt($(this).attr('data-count'))
   
 
   for (var i = 0; i < respo[x].activity.length; i++) {
   
-      $('#actlist').append('<option value="'+respo[x].activity[i]+'">'+respo[x].activity[i]+'</option>')
+      $('#actlisto').append('<option value="'+respo[x].activity[i]+'">'+respo[x].activity[i]+'</option>')
+      $('#actlistr').append('<option value="'+respo[x].activity[i]+'">'+respo[x].activity[i]+'</option>')
 }
 if(respo[x].activity.length==0){
-  $('#actlist').html('<option value="None">No activities</option>')
-  $('#submitbut').prop('disabled',true)
+  $('#actlisto').html('<option value="None">No activities</option>')
+
+  $('#actlistr').html('<option value="None">No activities</option>')
+  $('#submitbuto').prop('disabled',true)
+  $('#submitbutr').prop('disabled',true)
 }
     })      
 </script>
@@ -151,23 +172,18 @@ if(respo[x].activity.length==0){
       </div>
       <div class="modal-body">
       <div class="social-area">   
-    <input id="reqtoggle" type="checkbox" data-toggle="switch" />
-    <div class="switch" data-on-label="<i class='fa fa-check'></i>" data-off-label="<i class='fa fa-times'></i>">
-Recurring?   
-
-    </div>
-
-
-    </div>
+        <button id = "toggleview" class = "btn btn-filled btn-block"><div id = "label_onetime">Recurring</div><div id = "label_recur">One Time</div></button>
+          </div>
     
             </div>
+
          <div class = "container">
             <h4><b>Submit your volunteering request here</b></h4>
             <div id="eventreq"> 
             Single
             <form id="request_form" method = "POST" action="/request/volunteer/" enctype="multipart/form-data">
                 {% csrf_token %}
-                
+                <input id="request_type" name="request_type" type = "hidden" value = "One Time" class="form-control" /> 
                 <input id="ingoid" type = "hidden" name = "recepient" class="form-control" />                   
                 <div class = "row">
                 <div class="col-sm-4">
@@ -189,8 +205,8 @@ Recurring?
                 <div class="col-sm-4">
                    <div class="form-group label-floating">
                    <label class="control-label"></label>
-                   <select id="actlist" name="activity">
-</select>
+                   <select id="actlisto" name="activity">
+                   </select>
                    </div>
                 </div>
                 </div>
@@ -204,22 +220,30 @@ Recurring?
                 </div>                
                 <div class = "row">
                 <div class="col-sm-4">
-                   <input type = "submit" name = "submit" id="submitbut" value = "Submit" class="btn btn-default btn-raised btn-fill btn-info"/>                   
+                   <input id="submitbuto" type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised btn-fill btn-info"/>                   
                 </div>
                 </div>
              </form>
              </div>
              <div id="recreq" style="display:none;"> 
              Recurring
-            <form id="request_form" method = "POST" action="/request/volunteer/" enctype="multipart/form-data">
+            <form id="recurring_form" method = "POST" action="/request/volunteer/" enctype="multipart/form-data">
                 {% csrf_token %}
-                
+                 <input id="request_type" type = "hidden" value = "Recurring" class="form-control" /> 
                 <input id="ingoid" type = "hidden" name = "recepient" class="form-control" />                   
                 <div class = "row">
                 <div class="col-sm-4">
                    <div class="form-group label-floating">
-                   <label class="control-label"></label>
-                   <input type = "date" name = "date_vol" class=" form-control" />
+                   <label class="control-label">Start Date</label>
+                   <input type = "date" name = "startdate_vol" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label">End Date</label>
+                   <input type = "date" name = "enddate_vol" class=" form-control" />
                    </div>
                 </div>
                 </div>
@@ -235,7 +259,16 @@ Recurring?
                 <div class="col-sm-4">
                    <div class="form-group label-floating">
                    <label class="control-label"></label>
-                   <input type = "text" name = "activity" class=" form-control" />
+                   <input type = "text" name = "frequency" class=" form-control" />
+                   </div>
+                </div>
+                </div>
+                <div class = "row">
+                <div class="col-sm-4">
+                   <div class="form-group label-floating">
+                   <label class="control-label"></label>
+                   <select id="actlistr" name="activity">
+                   </select>
                    </div>
                 </div>
                 </div>
@@ -249,7 +282,7 @@ Recurring?
                 </div>                
                 <div class = "row">
                 <div class="col-sm-4">
-                   <input type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised btn-fill btn-info"/>                   
+                   <input id="submitbutr" type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised btn-fill btn-info"/>                   
                 </div>
                 </div>
              </form>
