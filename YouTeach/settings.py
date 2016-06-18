@@ -104,6 +104,7 @@ WSGI_APPLICATION = 'YouTeach.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+DATABASES={}
 DATABASES['default'] =  dj_database_url.config()
 LOGIN_REDIRECT_URL='/'
 LOGOUT_REDIRECT_URL='/'
