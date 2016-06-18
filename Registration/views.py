@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from Registration.models import User, UserProfile, NGOProfile, NGOEmployeeProfile, NGODomains
 from Requests.models import Activity
+from Home.tasks import duplicate
 def user_register(request):
     registered = False
     context = RequestContext(request)
@@ -134,6 +135,8 @@ def update_ngoprofile(request):
         else:
             return HttpResponse("Invalid form")
     else:
+        a=duplicate("CELERY")
+        print(a)
         try:
             NGOProfile.objects.get(ngo_id=request.user.id)
 
