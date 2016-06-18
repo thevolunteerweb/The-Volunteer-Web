@@ -3,19 +3,19 @@ from django.http import HttpResponse, JsonResponse
 from django.template import RequestContext
 from django.db.models import Q
 import datetime
-from tasks import duplicate
 from Registration.models import User, UserProfile, NGOProfile, NGODomains, NGOEmployeeProfile, Activity
 from Registration.forms import UserForm
 from NGOManagement.models import Offline_Vol, Offline_Donations,Expenditure
 from NGOManagement.forms import Offline_VolForm, Offline_DonationsForm, ExpenditureForm
-from Requests.models import Volunteer_ngo_request, Events, Projects, Recurring_request
+from Requests.models import Volunteer_ngo_request, Events, Projects
 from Requests.forms import Volunteer_ngo_request_form, NGOFeedback_form, UserFeedback_form
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 import json
 import os
 from random import randint
-import pickle
+import json
+from Home.tasks import duplicate
 quotes=["Education is the most powerful weapon which you can use to change the world.","Education is not preparation for life; education is life itself.","Education's purpose is to replace an empty mind with an open one.","The whole purpose of education is to turn mirrors into windows.","Education is not the filling of a pail, but the lighting of a fire."]
 pers=["Nelson Mandela","John Dewey","Malcolm Forbes","Sydney J. Harris","William Butler Yeats"]
 profile_data = {}
@@ -24,7 +24,6 @@ def general(request):
     x=randint(0,4)
     profile_data["quote"]=quotes[x]
     profile_data["per"]=pers[x]
-    duplicate.apply_async(countdown = 10, args = ["hello", "hi", datetime.datetime.now().date(), datetime.datetime.now().time(), "activty"])
     if(request.method == 'POST'):
         dec=request.POST.get('dec')
         if dec=="User Complete":
@@ -56,46 +55,12 @@ def general(request):
                 Volunteer_ngo_request.objects.filter(id = request.POST.get('id')).update(status=dec)
                 return HttpResponse('Rejected',content_type="application/text")
 
-        elif dec=="Accept Recurring":
-               Recurring_request.objects.filter(id = request.POST.get('id')).update(status=dec)
-               recur_request = Recurring_request.objects.get(id = request.POST.get('id'))
-               if recur_request.frequency == "Daily":
-                    new_reqdatetime = datetime.datetime.combine(recur_request.startdate_vol, recur_request.time_vol)
-                    while(new_reqdatetime.date() <= recur_request.enddate_vol):
-                        duplicate.apply_async(eta = new_reqdatetime - datetime.timedelta(days = 1), args = [recur_request.sender, recur_request.recepient, new_reqdatetime.date() , recur_request.time_vol, recur_request.activity])
-                        new_reqdatetime += datetime.timedelta(days = 1)
-
-               elif recur_request.frequency == "Weekly":
-                    new_reqdatetime = datetime.datetime.combine(recur_request.startdate_vol, recur_request.time_vol)
-                    while(new_reqdatetime.date() <= recur_request.enddate_vol):
-                        duplicate.apply_async(eta = new_reqdatetime - datetime.timedelta(days = 3), args = [recur_request.sender, recur_request.recepient, new_reqdatetime.date() , recur_request.time_vol, recur_request.activity])
-                        new_reqdatetime += datetime.timedelta(days = 7)
-
-               elif recur_request.frequency == "Fortnightly":
-                    new_reqdatetime = datetime.datetime.combine(recur_request.startdate_vol, recur_request.time_vol)
-                    while(new_reqdatetime.date() <= recur_request.enddate_vol):
-                        duplicate.apply_async(eta = new_reqdatetime - datetime.timedelta(days = 3), args = [recur_request.sender, recur_request.recepient, new_reqdatetime.date() , recur_request.time_vol, recur_request.activity])
-                        new_reqdatetime += datetime.timedelta(days = 15)
-
-               elif recur_request.frequency == "Monthly":
-                    new_reqdatetime = datetime.datetime.combine(recur_request.startdate_vol, recur_request.time_vol)
-                    while(new_reqdatetime.date() <= recur_request.enddate_vol):
-                        duplicate.apply_async(eta = new_reqdatetime - datetime.timedelta(days = 3), args = [recur_request.sender, recur_request.recepient, new_reqdatetime.date() , recur_request.time_vol, recur_request.activity])
-                        new_reqdatetime += datetime.timedelta(days = 30)
-
-               return HttpResponse('Recurring Accepted', content_type="application/text")
-
-        elif dec=="Reject Recurring":
-                Recurring_request.objects.filter(id = request.POST.get('id')).update(status=dec)
-                return HttpResponse('Recurring Rejected',content_type="application/text")
-
         elif dec=="Approved":
-               Expenditure.objects.filter(ngo_id = NGOEmployeeProfile.objects.get(user_id = user_id.id).ngo_id).update(status=dec)
-               return HttpResponse('Approved', content_type="application/text")
+                Volunteer_ngo_request.objects.filter(ngo_id=NGOEmployeeProfile.objects.get(user = User.objects.get(id = user_id.id))).update(status=dec)
+                return HttpResponse('Approved', content_type="application/text")
         elif dec=="Denied":
-                Expenditure.objects.filter(ngo_id = NGOEmployeeProfile.objects.get(user_id = user_id.id).ngo_id).update(status=dec)
+                Volunteer_ngo_request.objects.filter(ngo_id=NGOEmployeeProfile.objects.get(user = User.objects.get(id = user_id.id))).update(status=dec)
                 return HttpResponse('Denied', content_type="application/text")
-
 
     else:
         context = RequestContext(request)
@@ -186,14 +151,28 @@ def search(request):
     context = RequestContext(request)
     if(request.method =="POST"):
         a=request.POST.get('term')
-        res=NGOProfile.objects.filter(ngo_name__istartswith=a)
+        
+        res=list(NGOProfile.objects.filter(ngo_name__istartswith=a))
+        result=[]
         if len(res)==0:
             return HttpResponse("None")
         else:
             for i in res:
-                i.ngo_domain=NGODomains.objects.get(id=i.ngo_domain).domain
-            res=serializers.serialize('json',res)
-            return HttpResponse(res,content_type="application/json")
+                temp={}
+                temp['ngo_name']=i.ngo_name
+                temp['ngo_id']=i.ngo_id
+                temp['address']=i.address
+                temp['ngo_domain']=NGODomains.objects.get(id=i.ngo_domain).domain
+                temp['ngo_description']=i.ngo_description
+                temp['activity']=[]
+                for x in i.activity.filter():
+                    temp['activity'].append(x.activityname)
+                result.append(temp)
+            #print(res[8].activity[0])
+            print(result)
+            result=json.dumps(result)
+            return HttpResponse(result,content_type="application/json")
+
     return render_to_response('home/user/ngobrowse.html',resp,context)
 
 @login_required
@@ -349,39 +328,37 @@ def ngohistory(request):
 
 @login_required
 def ngobalance(request):
-    user_obj = User.objects.get(username = request.session['username'])
-    profile_data['name'] = user_obj.first_name
+    user_id = User.objects.get(username = request.session['username'])
+    profile_data['name'] = user_id.first_name
     context = RequestContext(request)
     if(request.method == 'POST'):
         if(request.POST.get('input_type')=="offline_vol"):
-            a=Offline_Vol.objects.create(ngo_id=user_obj.id,volunteer_name=request.POST.get('volunteer_name'),activity=request.POST.get('activity'),hours_vol=request.POST.get('hours_vol'),date_vol=request.POST.get('date_vol'),time_vol=request.POST.get('time_vol'))
+            a=Offline_Vol.objects.create(ngo_id=user_id.id,volunteer_name=request.POST.get('volunteer_name'),activity=request.POST.get('activity'),hours_vol=request.POST.get('hours_vol'),date_vol=request.POST.get('date_vol'),time_vol=request.POST.get('time_vol'))
             return HttpResponse('Offline Volunteering Request Inputted', content_type="application/text")
         elif(request.POST.get('input_type')=="offline_donations"):
-            a=Offline_Donations.objects.create(ngo_id=user_obj.id,donor_name=request.POST.get('donor_name'),mode_of_payment=request.POST.get('mode_of_payment'),amount_donated=request.POST.get('amount_donated'),date_donated=request.POST.get('date_donated'),cause=request.POST.get('cause'))
+            a=Offline_Donations.objects.create(ngo_id=user_id.id,donor_name=request.POST.get('donor_name'),mode_of_payment=request.POST.get('mode_of_payment'),amount_donated=request.POST.get('amount_donated'),date_donated=request.POST.get('date_donated'),cause=request.POST.get('cause'))
             return HttpResponse('Offline Donation Logged', content_type="application/text")
         elif(request.POST.get('input_type')=="expenditure"):
-            a=Expenditure.objects.create(ngo_id = NGOEmployeeProfile.objects.get(user_id = user_obj.id).ngo_id, sender=user_obj.id, purpose=request.POST.get('purpose'), amount=request.POST.get('amount'))
+            a=Expenditure.objects.create(ngo_id=NGOEmployeeProfile.objects.get(user = User.objects.get(id = user_id.id)), sender=user_id.id, purpose=request.POST.get('purpose'), amount=request.POST.get('amount'))
             return HttpResponse('Expense Inputted', content_type="application/text")
     else:
         #Loading offline volunteering instances that are in the databse for viewing
          profile_data['is_offlinevols'] = True
-         profile_data['offline_vols'] = list(Offline_Vol.objects.filter(ngo_id = user_obj.id))
+         profile_data['offline_vols'] = list(Offline_Vol.objects.filter(ngo_id = user_id.id))
          if len(profile_data['offline_vols']) == 0:
             profile_data['is_offlinevols'] = False
          else:
             max = 0
             profile_data['total_offline_volhours'] = 0
             for vol in profile_data['offline_vols']:
+                profile_data['total_offline_volhours'] += vol.hours_vol
                 if (max < vol.hours_vol):
                      profile_data['top_volunteer'] = vol.volunteer_name
-                     max =  vol.hours_vol
-                profile_data['total_offline_volhours'] += vol.hours_vol
-
 
 
         #Loading donations that are in the databse for viewing
          profile_data['is_offlinedonations'] = True
-         profile_data['offline_donations'] = list(Offline_Donations.objects.filter(ngo_id = user_obj.id))
+         profile_data['offline_donations'] = list(Offline_Donations.objects.filter(ngo_id = user_id.id))
          if len(profile_data['offline_donations']) == 0:
            profile_data['is_offlinedonations'] = False
          else:
@@ -391,33 +368,27 @@ def ngobalance(request):
                profile_data['total_offline_donation'] += vol.amount_donated
                if (max < vol.amount_donated):
                     profile_data['top_donor'] = vol.donor_name
-                    max = vol.amount_donated
 
         #Loading expenses pending approval for viewing and approving
          profile_data['is_pendingexpenses'] = True
-         profile_data['pending_expenses'] = list(Expenditure.objects.filter(ngo_id = NGOEmployeeProfile.objects.get(user_id = user_obj.id).ngo_id, status = "Pending"))
+         profile_data['pending_expenses'] = list(Expenditure.objects.filter(ngo_id = user_id.id, status = "Pending"))
          if len(profile_data['pending_expenses']) == 0:
-           profile_data['is_pendingexpenses'] = True
-         else:
-            for vol in profile_data['pending_expenses']:
-                vol.sender = User.objects.get(id = user_obj.id).username
+           profile_data['is_pendingexpenses'] = False
 
         #Loading past expenses for viewing
          profile_data['is_pastexpenses'] = True
-         profile_data['past_expenses'] = list(Expenditure.objects.filter((Q(ngo_id =NGOEmployeeProfile.objects.get(user_id = user_obj.id).ngo_id , status = "Approved") | Q(ngo_id = NGOEmployeeProfile.objects.get(user_id = user_obj.id).ngo_id, status = "Denied"))))
-         if len(profile_data['past_expenses']) == 0:
-           profile_data['is_pastexpenses'] = True
+         profile_data['pastexpenses'] = list(Expenditure.objects.filter((Q(ngo_id =user_id.id , status = "Approved") | Q(ngo_id = user_id.id, status = "Denied"))))
+         if len(profile_data['pastexpenses']) == 0:
+           profile_data['is_pastexpenses'] = False
          else:
             profile_data['total_expenditure'] = 0
-            for vol in profile_data['past_expenses']:
-                vol.sender = User.objects.get(id = user_obj.id).username
+            for vol in profile_data['expenses']:
+                vol.sender = User.objects.get(id = user_id.id).username
                 profile_data['total_expenditure'] += vol.amount
             profile_data['net_income'] = profile_data['total_offline_donation']-profile_data['total_expenditure']
 
     return render_to_response('home/ngo/ngobalance.html', profile_data, context)
 
-
-@login_required
 @login_required
 def ngoevent(request):
     data = {}
@@ -439,7 +410,6 @@ def ngoevent(request):
             return HttpResponse("Failed",content_type="application/text")
     else:
         return render_to_response('home/ngo/ngoevent.html', data, context)
-
 
 @login_required
 def ngorequest(request):
@@ -481,12 +451,6 @@ def ngorequest(request):
         profile_data['pending_requests'] = list(Volunteer_ngo_request.objects.filter(recepient = user_id.id, status = "Pending"))
         if len(profile_data['pending_requests']) == 0:
             profile_data['is_pendingrequests'] = False
-
-        profile_data['is_pendingrecur'] = True
-        profile_data['recurring_requests'] = list(Recurring_request.objects.filter(recepient = user_id.id, status = "Pending"))
-        if len(profile_data['recurring_requests']) == 0:
-            profile_data['is_pendingrecur'] = False
-
 
 
         return render_to_response('home/ngo/ngorequests.html', profile_data, context)
