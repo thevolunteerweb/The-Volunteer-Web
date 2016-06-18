@@ -3,11 +3,11 @@ from django.http import HttpResponse, JsonResponse
 from django.template import RequestContext
 from django.db.models import Q
 import datetime
-from Registration.models import User, UserProfile, NGOProfile, NGODomains, NGOEmployeeProfile, Activity
+from Registration.models import User, UserProfile, NGOProfile, NGODomains, NGOEmployeeProfile
 from Registration.forms import UserForm
 from NGOManagement.models import Offline_Vol, Offline_Donations,Expenditure
 from NGOManagement.forms import Offline_VolForm, Offline_DonationsForm, ExpenditureForm
-from Requests.models import Volunteer_ngo_request, Events, Projects
+from Requests.models import Volunteer_ngo_request, Events, Projects, Activity
 from Requests.forms import Volunteer_ngo_request_form, NGOFeedback_form, UserFeedback_form
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
