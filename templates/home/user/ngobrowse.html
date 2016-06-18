@@ -138,12 +138,12 @@ ajaxreq("")
       $('#actlisto').append('<option value="'+respo[x].activity[i]+'">'+respo[x].activity[i]+'</option>')
       $('#actlistr').append('<option value="'+respo[x].activity[i]+'">'+respo[x].activity[i]+'</option>')
 }
+
 if(respo[x].activity.length==0){
   $('#actlisto').html('<option value="None">No activities</option>')
 
   $('#actlistr').html('<option value="None">No activities</option>')
-  $('#submitbuto').prop('disabled',true)
-  $('#submitbutr').prop('disabled',true)
+  
 }
     })      
 </script>
