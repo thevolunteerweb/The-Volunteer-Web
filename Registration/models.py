@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from Requests.models import Activity
+#from Requests.models import Activity
 
 class NGODomains(models.Model):
     domain=models.TextField(max_length=100,blank=True)
