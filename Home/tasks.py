@@ -1,10 +1,11 @@
 from celery import Celery
 from celery import task
 from Requests.models import Volunteer_ngo_request
+from Registration.models import NGODomains
 import datetime
 @task
-def duplicate(a,b):
-    Volunteer_ngo_request.objects.create(sender = a, recepient = b, status = "Accept")
+def duplicate(a):
+    NGODomains.objects.create(domain = a)
     return "Success"
 @task
 def sum(a,b):
