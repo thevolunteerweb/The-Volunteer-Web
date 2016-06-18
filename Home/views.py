@@ -168,8 +168,6 @@ def search(request):
                 for x in i.activity.filter():
                     temp['activity'].append(x.activityname)
                 result.append(temp)
-            #print(res[8].activity[0])
-            print(result)
             result=json.dumps(result)
             return HttpResponse(result,content_type="application/json")
 
