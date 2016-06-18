@@ -32,15 +32,17 @@
 {% block body %}
 {%if user.is_authenticated%}
 {% else %} <!-- Else (not user.is_authenticated) -->
-    <div class="row">
+    <div class="row">            
             <div class="col-sm-12 ">
-                <div class="card-container">
+                <div class="card-container manual-flip" >
                 <div class="card">
-                    <div class="front">
+                    <div class="front"  >
                         <div class="content">
                             <div class="main">
                                 <h3 class="name">What is the Volunteer Web?</h3>
-                                <p class="text-center">The Volunteer Web is a website that bridges the gap between volunteers and ngos, allowing them to connect to each other directly without the hassle of endless phone calls and searching.</p>
+                                <p class="text-center">The Volunteer Web is a website that bridges the gap between volunteers and ngos, allowing them to connect to each other directly without the hassle of endless phone calls and searching.</p> 
+                                <br><br><br><br><br><br><br><br><br><br><br><br>
+                                <div class = "col-md-2 col-md-offset-5"><button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block">Know more</button></div>
                             </div>
                         </div>
                     </div> <!-- end front panel -->
@@ -52,6 +54,8 @@
                             <div class="main">
                                 <h4 class="text-center">What we do</h4>
                                 <p class="text-center">Our Message</p>
+                                <br><br><br><br><br><br><br>
+                                <div class = "col-md-2 col-md-offset-5"><button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block">Back</button></div> 
                             </div>
                             </div>
                         
