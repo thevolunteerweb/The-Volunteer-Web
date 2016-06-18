@@ -34,7 +34,7 @@ class NGOProfile (models.Model):
     ngo_name = models.TextField(max_length = 100)
     ngo_description=models.TextField(max_length=200, blank=True)
     ngo_domain=models.IntegerField(blank=True)
-    activity = models.ManyToManyField(Activity)
+    #activity = models.ManyToManyField(Activity)
 
 
 
