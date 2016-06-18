@@ -135,8 +135,6 @@ def update_ngoprofile(request):
         else:
             return HttpResponse("Invalid form")
     else:
-        a=duplicate.apply_async(countdown=10,args=["CELERYASYNC"])
-        print(a)
         try:
             NGOProfile.objects.get(ngo_id=request.user.id)
 
