@@ -47,7 +47,7 @@ class Events(models.Model):
     enddate_vol = models.DateField(blank = True,null=True)
     starttime_vol = models.TimeField(blank = True)
     endtime_vol = models.TimeField(blank = True)
-    #activities = models.ManyToManyField(Activity)
+    activities = models.ManyToManyField(Activity)
     activity_goal = models.TextField(null = True, max_length = 240)
     status = models.TextField(blank = False, default = "Upcoming")
 
