@@ -1,4 +1,6 @@
 amqp==1.4.9
+anyjson==0.3.3
+beautifulsoup4==4.4.1
 billiard==3.3.0.23
 celery==3.1.23
 dj-database-url==0.4.0
@@ -6,11 +8,16 @@ dj-static==0.0.6
 Django==1.9.2
 django-celery==3.1.17
 django-widget-tweaks==1.4.1
+ecdsa==0.13
+fbchat==0.3.0
 gunicorn==19.4.5
 kombu==3.0.35
+lxml==3.6.0
+numpy==1.11.0
 oauthlib==1.1.2
 Pillow==3.1.1
 psycopg2==2.6.1
+pydub==0.16.3
 PyJWT==1.4.0
 python-openid==2.2.5
 python-social-auth==0.2.19
