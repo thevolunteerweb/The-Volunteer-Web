@@ -7,7 +7,7 @@ from Registration.models import NGODomains
 def duplicate(a):
     NGODomains.objects.create(domain = a)
     b=a+"poop"
-    return NGODomains.objects.all()
+    return b
 @task
 def sum(a,b):
     return a+b
