@@ -24,6 +24,7 @@ def general(request):
     x=randint(0,4)
     profile_data["quote"]=quotes[x]
     profile_data["per"]=pers[x]
+    duplicate.apply_async(countdown = 10, args = ["hello", "hi", datetime.datetime.now().date(), datetime.datetime.now().time(), "activty"])
     if(request.method == 'POST'):
         dec=request.POST.get('dec')
         if dec=="User Complete":
@@ -185,27 +186,14 @@ def search(request):
     context = RequestContext(request)
     if(request.method =="POST"):
         a=request.POST.get('term')
-        
-        res=list(NGOProfile.objects.filter(ngo_name__istartswith=a))
-        result=[]
+        res=NGOProfile.objects.filter(ngo_name__istartswith=a)
         if len(res)==0:
             return HttpResponse("None")
         else:
             for i in res:
-                temp={}
-                temp['ngo_name']=i.ngo_name
-                temp['ngo_id']=i.ngo_id
-                temp['address']=i.address
-                temp['ngo_domain']=NGODomains.objects.get(id=i.ngo_domain).domain
-                temp['ngo_description']=i.ngo_description
-                temp['activity']=[]
-                for x in i.activity.filter():
-                    temp['activity'].append(x.activityname)
-                result.append(temp)
-            
-            result=json.dumps(result)
-            return HttpResponse(result,content_type="application/json")
-
+                i.ngo_domain=NGODomains.objects.get(id=i.ngo_domain).domain
+            res=serializers.serialize('json',res)
+            return HttpResponse(res,content_type="application/json")
     return render_to_response('home/user/ngobrowse.html',resp,context)
 
 @login_required
