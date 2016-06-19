@@ -10,7 +10,7 @@ from Home.tasks import duplicate
 import sendgrid
 from sendgrid.helpers.mail import *
 SGapikey='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'
-def sendEmail(a,b,c,d,key):
+def sendEmail(key,a,b,c,d):
      return sendgrid.SendGridAPIClient(apikey=key).client.mail.send.post(request_body=Mail(Email(a),b,Email(c),Content('text/plain',d)).get())
 
 def user_register(request):
@@ -26,7 +26,6 @@ def user_register(request):
             user.save()
             #User Profile Instance
             a=sendEmail('tvw@gmail.com','Hi from TVW',user.email,'Welcome to TheVolunteerWeb! Have fun volunteering!',SGapikey)
-            print("SENDGRID: "+a)
             luser = authenticate(username = request.POST.get('username'), password = request.POST.get('password'))
 
             if luser:
