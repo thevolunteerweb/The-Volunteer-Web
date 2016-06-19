@@ -7,6 +7,11 @@ from django.template import RequestContext
 from Registration.models import User, UserProfile, NGOProfile, NGOEmployeeProfile, NGODomains
 from Requests.models import Activity
 from Home.tasks import duplicate
+import sendgrid
+SGapikey='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'
+def sendEmail(a,b,c,d,key):
+     return sendgrid.SendGridAPIClient(apikey=key).client.mail.send.post(request_body=Mail(Email(a),b,Email(c),Content('text/plain',d)).get())
+
 def user_register(request):
     registered = False
     context = RequestContext(request)
@@ -19,7 +24,7 @@ def user_register(request):
             user.set_password(user.password)
             user.save()
             #User Profile Instance
-
+            sendEmail('tvw@gmail.com','Hi from TVW',user.email,'Welcome to TheVolunteerWeb! Have fun volunteering!',SGapikey)
             luser = authenticate(username = request.POST.get('username'), password = request.POST.get('password'))
 
             if luser:
@@ -144,4 +149,5 @@ def update_ngoprofile(request):
             arrayact=list(Activity.objects.filter())
             return render_to_response('registration/ngo.html', {'profile_form':profile_form,'array':array,'arrayact':arrayact}, context)
     	return HttpResponseRedirect("/")
+
 
