@@ -139,8 +139,6 @@ def update_ngoprofile(request):
             NGOProfile.objects.get(ngo_id=request.user.id)
 
         except:
-            a=duplicate.apply_async(countdown=10,args=["CELERY"])
-            print(a.get())
             profile_form = NGOProfileForm()
             array=list(NGODomains.objects.filter())
             arrayact=list(Activity.objects.filter())
