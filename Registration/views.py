@@ -8,6 +8,7 @@ from Registration.models import User, UserProfile, NGOProfile, NGOEmployeeProfil
 from Requests.models import Activity
 from Home.tasks import duplicate
 import sendgrid
+from sendgrid.helpers.mail import *
 SGapikey='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'
 def sendEmail(a,b,c,d,key):
      return sendgrid.SendGridAPIClient(apikey=key).client.mail.send.post(request_body=Mail(Email(a),b,Email(c),Content('text/plain',d)).get())
