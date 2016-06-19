@@ -19,13 +19,14 @@ Pillow==3.1.1
 psycopg2==2.6.1
 pydub==0.16.3
 PyJWT==1.4.0
+python-http-client==2.1.0
 python-openid==2.2.5
 python-social-auth==0.2.19
-sendgrid>=0.5.0
 pytz==2016.4
 redis==2.10.5
 requests==2.9.1
 requests-oauthlib==0.6.1
+sendgrid==3.0.0
 six==1.10.0
 static3==0.6.1
 whitenoise==2.0.6
