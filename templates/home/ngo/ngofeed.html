@@ -3,13 +3,155 @@
 {% block feed %}active{% endblock %}
 {% block lfeed %}#{% endblock %}
 {%block body%}
-	
+
         <div class="wrapper">
             <div class="container-fluid">
-                <div class="row">
-
-                </div>
+                <div class="row">           
+                <div class="col-sm-4">
+                <div class="card-container">
+                <div class="card">
+                    <div class="front">
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">Top Volunteers for your NGO</h3>
+                                <p class="text-center">Names of the top 5 volunteers</p>
+                            </div>
+                        </div>
+                    </div> <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h5 class="motto">More</h5>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4 class="text-center">Table of top 5 volunteers</h4>
+                                <p class="text-center">Name along with total number of hours contributed at this NGO</p>
+                            </div>
+                            </div>
+                        
+                    </div> <!-- end back panel -->
+                </div> <!-- end card -->
+            </div> <!-- end card-container -->
             </div>
-        </div>
-{%endblock%}
+            <div class="col-sm-4">
+                <div class="card-container">
+                <div class="card">
+                    <div class="front">
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">Total hours volunteered through the site at your NGO</h3>
+                                <p class="text-center">{{hours_vol}}</p>
+                            </div>
+                        </div>
+                    </div> <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h5 class="motto">More Stats about your NGO</h5>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4 class="text-center">Last completed request</h4>
+                                <p class="text-center"></p>
+                                <h4 class="text-center">Stat 2</h4>
+                                <p class="text-center"></p>                                
+                            </div>
+                            </div>
+                        
+                    </div> <!-- end back panel -->
+                </div> <!-- end card -->
+            </div> <!-- end card-container -->
+            </div>
+                    
+             <div class="col-sm-4">
+                <div class="card-container">
+                <div class="card">
+                    <div class="front">
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">NGO Management Card</h3>
+                                <h4 class="text-center">Total Expenditure</h4>
+                                <p class="text-center">{{total_expenditure}}</p>
+                                <h4 class="text-center">Total Donations</h4>
+                                <p class="text-center">{{total_donation}}</p>
+                                <h4 class="text-center">Total Hours of Offline Volunteering Requests</h4>
+                                <p class="text-center">{{offlinehours_vol}}</p>
+                            </div>
+                        </div>
+                    </div> <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h5 class="motto">More stats about NGO management</h5>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4 class="text-center">Net Income</h4>
+                                <p class="text-center"></p>
+                                <h4 class="text-center">Comparison between hours volunteered on the site and off the site</h4>
+                                <p class="text-center"></p>
+                                <h4 class="text-center">Top Offline Volunteer</h4>
+                                <p class="text-center">Enter the top volunteer's name</p>
+                            </div>
+                            </div>
+                        
+                    </div> <!-- end back panel -->
+                </div> <!-- end card -->
+            </div> <!-- end card-container -->
+            </div> 
+                    
+            <div class="col-sm-6">
+                <div class="card-container">
+                <div class="card">
+                    <div class="front">
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">Ongoing Events</h3>
+                                <p class="text-center">Names</p>
+                            </div>
+                        </div>
+                    </div> <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h5 class="motto">More</h5>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4 class="text-center">Names + Brief Explanatoin</h4>
+                                <p class="text-center">Also include a button to go to the events page</p>
+                            </div>
+                            </div>
+                        
+                    </div> <!-- end back panel -->
+                </div> <!-- end card -->
+            </div> <!-- end card-container -->
+            </div>
+            
+            <div class="col-sm-6">
+                <div class="card-container">
+                <div class="card">
+                    <div class="front">
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">Ongoing Projects</h3>
+                                <p class="text-center">Names</p>
+                            </div>
+                        </div>
+                    </div> <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h5 class="motto">More</h5>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4 class="text-center">Names + Brief Explanatoin</h4>
+                                <p class="text-center">Also include a button to go to the projects page</p>
+                            </div>
+                            </div>
+                        
+                    </div> <!-- end back panel -->
+                </div> <!-- end card -->
+            </div> <!-- end card-container -->
+            </div> 
+           
+</div>
 
+{% endblock %}

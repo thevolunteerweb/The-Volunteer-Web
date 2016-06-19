@@ -8,6 +8,7 @@ dec=""
 id=""
 
 $(document).ready(function(){
+    $("#label_input").css("display","none")
     $("#output").css("display","none")
     var a_switch
     a_switch = 0
@@ -135,7 +136,7 @@ $(".deny").click(function(){
 <div class="wrapper">  
 <div class = "row">
     <div class = "col-md-2 col-md-offset-1">
-    <button id = "toggleview" class = "btn btn-filled btn-block"><div id = "label_input" style = "display: none">View Input</div><div id = "label_output">View Output</div></button>
+    <button id = "toggleview" class = "btn btn-filled btn-block"><div id = "label_input">View Input</div><div id = "label_output">View Output</div></button>
     </div>
 </div>
 <div id = "input" class="row">

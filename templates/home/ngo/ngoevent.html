@@ -1,5 +1,4 @@
 {% extends 'ngodashboardbase.html'%}
-
 {% block event %}active{% endblock %}
 {% block levent %}#{% endblock %}
 {%block body%}
@@ -8,7 +7,26 @@ dec=""
 id=""
 
 $(document).ready(function(){
-   
+    $("#label_input").css("display","none")
+    $("#output").css("display","none")
+    var a_switch
+    a_switch = 0
+    $("#toggleview").click(function(){
+        a_switch = 1 - a_switch
+        if(a_switch==0){
+            $("#input").fadeIn(200);
+            $("#output").fadeOut(200);
+            $("#label_input").css("display","none")
+            $("#label_output").css("display","block")
+          }
+          if(a_switch==1){
+            $("#input").fadeOut(200);
+            $("#output").fadeIn(200);
+            $("#label_input").css("display","block")
+            $("#label_output").css("display","none")
+          }
+  });
+    
     $("#eventsub").click(function(){
     var element =this
     a=[]
@@ -19,9 +37,6 @@ $(document).ready(function(){
         b.push($('[data-link="'+$(this).val()+'"]').val())    
 
     })
-    alert(a)
-    alert(b)
-    alert($('#startdate_vol').val())
     $.ajax({
         url : "/home/ngo/event/", // the endpoint
         type : "POST", // http method
@@ -29,8 +44,40 @@ $(document).ready(function(){
 
         // handle a successful response
         success : function(result) {
-            alert("Hell yes")
-            alert(result)
+            rotateCard(element)
+            $('#event1')[0].reset(); 
+            $('#event2')[0].reset(); 
+            //Add a statement to make the checkboxes reset as well
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+  });
+    
+$("#projectsub").click(function(){
+    var element =this
+    a=[]
+    b=[]
+    $('.activities:checked').each(function(){
+        a.push($(this).val())
+
+        b.push($('[data-link="'+$(this).val()+'"]').val())    
+
+    })
+    $.ajax({
+        url : "/home/ngo/event/", // the endpoint
+        type : "POST", // http method
+        data : { 'type': "event", 'event_name': $('#event_name').val(),'startdate_vol' : $('#startdate_vol').val(),'starttime_vol' : $('#starttime_vol').val(),'enddate_vol': $('#enddate_vol').val(),'endtime_vol': $('#endtime_vol').val(),'activities[]':a,'activity_goal[]':b},// data sent with the post request
+
+        // handle a successful response
+        success : function(result) {
+            rotateCard(element)
+            $('#project1')[0].reset(); 
+            $('#project2')[0].reset(); 
+            //Add a statement to make the checkboxes reset as well
         },
 
         // handle a non-successful response
@@ -41,78 +88,262 @@ $(document).ready(function(){
   });
     
 
-    
+   
 });
 </script>
-<div class="wrapper">  
+<div class="wrapper"> 
 <div class="container-fluid" >
-
-                <button id="eventsub" class="btn btn-default btn-raised btn-fill btn-info">Add</button>
-    <div class = "row">
-                <div class="col-sm-4">
+<div class="wrapper">  
+<div class = "row">
+    <div class = "col-md-2 col-md-offset-1">
+    <button id = "toggleview" class = "btn btn-filled btn-block"><div id = "label_input">View Input</div><div id = "label_output">View Output</div></button>
+    </div>
+</div>
+<div id = "input" class="row">
+    <div class = "col-md-6">
+        <h2>Event</h2>
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            <form id = "event1">
                    <div class="form-group label-floating">
                    <label class="control-label">Name</label>
                    <input type = "text" id= "event_name" class=" form-control" />
                    </div>
-                </div>
-                </div>
-    <div class = "row">
-                <div class="col-sm-4">
+                
+              
                    <div class="form-group label-floating">
                    <label class="control-label">Start Date</label>
                    <input type = "date" id="startdate_vol" class=" form-control" />
                    </div>
-                </div>
-                </div>
-                <div class = "row">
-                <div class="col-sm-4">
+                
                    <div class="form-group label-floating">
                    <label class="control-label">Start Time</label>
                    <input type = "time" id= "starttime_vol" class=" form-control" />
                    </div>
-                </div>
-                </div>
-                <div class = "row">
-                <div class="col-sm-4">
+           
                    <div class="form-group label-floating">
                    <label class="control-label">End Date</label>
                    <input type = "date" id= "enddate_vol" class=" form-control" />
                    </div>
-                </div>
-                </div>
-                <div class = "row">
-                <div class="col-sm-4">
+                
                    <div class="form-group label-floating">
                    <label class="control-label">End Time</label>
                    <input type = "time" id= "endtime_vol" class=" form-control" />
                    </div>
+                    <button type="button" onclick = "rotateCard(this)" class="btn btn-default btn-raised btn-fill btn-info">Continue</button>
+                </form>             
                 </div>
-                </div>
-                {% for option in array %}
+            </div>
+            <div class = "back">
+                <h3>Add Activities</h3>
+            <div class = "content">
+            <form id = "event2">
+               
+            {% for option in array %}               
+                
                     <div class = "row">
-                <div class="col-sm-4">
+                    <div class="col-sm-5">
+                       <div class="form-group label-floating">
+
+                    <label class="checkbox checkbox-blue" for="checkbox1">
+
+                    <input type="checkbox" name="activities" value="{{option.activityname}}" class="activities" data-toggle="checkbox">
+                       {{option.activityname}}
+                       </label>
+                       </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                       <input type = "number" data-link="{{option.activityname}}" class=" form-control" />
+                    </div>
+                </div>
+                    
+                {% endfor %} 
+                    
+                </form>
+            <button type="button" id = "eventsub" class="btn btn-info btn-fill btn-block"> Create Event </button>
+            </div>
+        </div> 
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div>
+    
+    <div class = "col-md-6">
+        <h2>Project</h2>
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            <form id = "project1">
                    <div class="form-group label-floating">
-
-                <label class="checkbox checkbox-blue" for="checkbox1">
-
-                <input type="checkbox" name="activities" value="{{option.activityname}}" class="activities" data-toggle="checkbox">
-                   {{option.activityname}}
-                   </label>
+                   <label class="control-label">Name</label>
+                   <input type = "text" id= "event_name" class=" form-control" />
                    </div>
-                </div>
-
-                <div class="col-sm-4">
+                
+              
                    <div class="form-group label-floating">
-                   <label class="control-label">Volunteer goal</label>
-                   <input type = "number" data-link="{{option.activityname}}" class=" form-control" />
+                   <label class="control-label">Start Date</label>
+                   <input type = "date" id="startdate_vol" class=" form-control" />
                    </div>
+                
+                   <div class="form-group label-floating">
+                   <label class="control-label">Start Time</label>
+                   <input type = "time" id= "starttime_vol" class=" form-control" />
+                   </div>
+           
+                   <div class="form-group label-floating">
+                   <label class="control-label">End Date</label>
+                   <input type = "date" id= "enddate_vol" class=" form-control" />
+                   </div>
+                
+                   <div class="form-group label-floating">
+                   <label class="control-label">End Time</label>
+                   <input type = "time" id= "endtime_vol" class=" form-control" />
+                   </div>
+                    <button type="button" onclick = "rotateCard(this)" class="btn btn-default btn-raised btn-fill btn-info">Continue</button>
+                </form>             
                 </div>
+            </div>
+            <div class = "back">
+                <h3>Add Activities</h3>
+            <div class = "content">
+            <form id = "project2">
+               
+            {% for option in array %}               
+                
+                    <div class = "row">
+                    <div class="col-sm-5">
+                       <div class="form-group label-floating">
+
+                    <label class="checkbox checkbox-blue" for="checkbox1">
+
+                    <input type="checkbox" name="activities" value="{{option.activityname}}" class="activities" data-toggle="checkbox">
+                       {{option.activityname}}
+                       </label>
+                       </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                       <input type = "number" data-link="{{option.activityname}}" class=" form-control" />
+                    </div>
                 </div>
-                {% endfor %}
-
-
+                    
+                {% endfor %} 
+                    
+                </form>
+            <button type="button" id = "projectsub" class="btn btn-info btn-fill btn-block"> Create Project</button>
+            </div>
+        </div> 
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div>
+    
+        </div>
+<div id = "output" class="row">
+    <div class = "col-md-10 col-md-offset-1">
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            {% if is_offlinevols %}
+            <div class = "table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <td><b>Logged at</b></td>
+                    <td><b>Volunteer Name</b>/b></td>
+                    <td><b>Date of volunteering</b></td>
+                    <td><b>Time of volunteering</b></td>
+                    <td><b>Activity</b></td>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for req in offline_vols %}
+                <tr>
+                    <td> {{req.date_time_req}} </td>
+                    <td> {{req.volunteer_name}} </td>
+                    <td> {{req.date_vol}}</td>
+                    <td> {{req.time_vol}}</td>
+                    <td> {{req.activity}}</td>
+                </tr>
+                {% endfor %}        
+            </tbody>
+            </table>
+            </div>   
+            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block">View a summary of your offline volunteering instances.</button>
+            {% else %}
+                <h2>No offline volunteering instances logged</h2>
+            {%endif%}            
+            </div>       
+            </div>        
+            <div class = "back">
+            <div class = "content">
+            <h2>Summary</h2>
+            <h3><b>Top Volunteer</b>: {{top_volunteer}}</h3>
+            <h3><b>Total Hours of Volunteering (Offline)</b>: {{total_offline_volhours}}</h3>                
+            </div>
+            </div> 
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div>
+     <div class = "col-md-10 col-md-offset-1">
+        <div class="card-container manual-flip">
+        <div class="card">
+            <div class = "front">
+            <div class = "content">
+            {% if is_offlinedonations %}
+            <div class = "table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <td><b>Logged at</b></td>
+                    <td><b>Donor Name</b></td>
+                    <td><b>Date of Donation</b></td>
+                    <td><b>Cause</b></td>
+                    <td><b>Amount Donated</b></td>
+                    <td><b>Mode of Payment</b></td>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for req in offline_donations%}
+                <tr>
+                    <td> {{req.date_time_req}} </td>
+                    <td> {{req.donor_name}} </td>
+                    <td> {{req.date_donated}}</td>
+                    <td> {{req.cause}}</td>
+                    <td> {{req.amount_donated}}</td>
+                    <td> {{req.mode_of_payment}}</td>
+                </tr>
+                {% endfor %}        
+            </tbody>
+            </table>
+            </div>
+            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block">View a summary of your offline volunteering instances.</button>
+            {% else %}
+                <h2>No donations logged.</h2>
+            {%endif%}            
+            </div>       
+            </div>        
+            <div class = "back">
+            <div class = "content">
+            <h2>Summary</h2>
+            <h3><b>Top Donor</b>: {{top_donor}}</h3>
+            <h3><b>Total Amount Received in Donations</b>: {{total_offline_donation}}</h3>                
+            </div>
+            </div>
+        </div><!-- end card  --> 
+        </div><!-- end card container -->
+        </div> 
+    
+      
+    </div>
 </div>
+   
+    </div>
+     
+    
 </div>
-{%endblock%}
-{%block footer%}
+
 {%endblock%}

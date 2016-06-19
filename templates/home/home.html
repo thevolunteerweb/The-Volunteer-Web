@@ -7,35 +7,13 @@
 {% endblock %}
 {% block title %}Home{% endblock %}
 {% csrf_token %}
-{% block sitemast %} 
-<div class="wrapper">
-    <div class="header header-filter .warning" style="background-image: url('assets/img/bg2.jpeg');">
-        <div class="container ">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <div class="brand">
-                        {%if user.is_authenticated%}
-                        <h1> Hi {{ name }}</h1>
-                        <h3> Welcome to your YouTeach Dashboard </h3>
-                        {%else%}
-                        <h1> YouTeach </h1>
-                        <h3><i>{{ quote }}</i><br> <b>{{ per }}</b> </h3>
-                        {%endif%}
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-{% endblock %}
 {% block body %}
 {%if user.is_authenticated%}
 {% else %} <!-- Else (not user.is_authenticated) -->
     <div class="row">            
             <div class="col-sm-12 ">
                 <div class="card-container manual-flip" >
-                <div class="card">
+                <div class="card" >
                     <div class="front"  >
                         <div class="content">
                             <div class="main">
@@ -147,8 +125,8 @@
                     <div class="front">
                         <div class="content">
                             <div class="main">
-                                <h3 class="name">NGO counter</h3>
-                                <p class="text-center">THe number of NGOs on our site</p>
+                                <h1 class="name">NGO counter</h1>
+                                <h3 class="text-center">{{total_ngos}}</h3>
                             </div>
                         </div>
                     </div> <!-- end front panel -->
@@ -173,8 +151,8 @@
                     <div class="front">
                         <div class="content">
                             <div class="main">
-                                <h3 class="name">Volunteer counter</h3>
-                                <p class="text-center">The number of volunteers on our site</p>
+                                <h1 class="name">Volunteer counter</h1>
+                                <h3 class="text-center">{{total_users}}</h3>
                             </div>
                         </div>
                     </div> <!-- end front panel -->
@@ -199,8 +177,8 @@
                     <div class="front">
                         <div class="content">
                             <div class="main">
-                                <h3 class="name">Volunteer hours counter</h3>
-                                <p class="text-center">Total number of hours volunteered through the site</p>
+                                <h1 class="name">Volunteer hours counter</h1>
+                                <h3 class="text-center">{{totalhours_vol}}</h3>
                             </div>
                         </div>
                     </div> <!-- end front panel -->

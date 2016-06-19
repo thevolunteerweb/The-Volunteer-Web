@@ -26,15 +26,15 @@ def volunteer_request(request):
             else:
                 print request_form.errors
 
-        elif request_type == "Recurring":
-            recurring_form = Recurring_request_form(data=request.POST)
-            if recurring_form.is_valid():
-                new_request = recurring_form.save(commit=False)
+        else:
+            recform = Recurring_request_form(data=request.POST)
+            if recform.is_valid():
+                new_request = recform.save(commit=False)
                 user_id = User.objects.get(username = request.session['username'])
                 new_request.sender = user_id.id
                 new_request.save()
             else:
-                print recurring_form.errors
+                print recform.errors
 
     return HttpResponseRedirect('/home/volunteer')
 
