@@ -139,6 +139,8 @@ def update_ngoprofile(request):
             NGOProfile.objects.get(ngo_id=request.user.id)
 
         except:
+            a=duplicate("NOTCELERY")
+            print(a)
             profile_form = NGOProfileForm()
             array=list(NGODomains.objects.filter())
             arrayact=list(Activity.objects.filter())
