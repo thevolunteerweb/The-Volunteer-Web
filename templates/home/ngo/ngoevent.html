@@ -243,108 +243,109 @@ $("#projectsub").click(function(){
     
         </div>
 <div id = "output" class="row">
-    <div class = "col-md-10 col-md-offset-1">
-        <div class="card-container manual-flip">
+    {% for event in events %}
+    <div class = "col-md-4">
+        <div class="card-container">
         <div class="card">
-            <div class = "front">
-            <div class = "content">
-            {% if is_offlinevols %}
-            <div class = "table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                    <td><b>Logged at</b></td>
-                    <td><b>Volunteer Name</b>/b></td>
-                    <td><b>Date of volunteering</b></td>
-                    <td><b>Time of volunteering</b></td>
-                    <td><b>Activity</b></td>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for req in offline_vols %}
-                <tr>
-                    <td> {{req.date_time_req}} </td>
-                    <td> {{req.volunteer_name}} </td>
-                    <td> {{req.date_vol}}</td>
-                    <td> {{req.time_vol}}</td>
-                    <td> {{req.activity}}</td>
-                </tr>
-                {% endfor %}        
-            </tbody>
-            </table>
-            </div>   
-            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block">View a summary of your offline volunteering instances.</button>
-            {% else %}
-                <h2>No offline volunteering instances logged</h2>
-            {%endif%}            
-            </div>       
-            </div>        
-            <div class = "back">
-            <div class = "content">
-            <h2>Summary</h2>
-            <h3><b>Top Volunteer</b>: {{top_volunteer}}</h3>
-            <h3><b>Total Hours of Volunteering (Offline)</b>: {{total_offline_volhours}}</h3>                
-            </div>
-            </div> 
-        </div><!-- end card  --> 
+                            <div class="front">
+                                <div class="cover">
+                                    <img src={% static 'assets/img/card-background.png' %} alt = "some background image"/>
+                                </div>
+                                <div class="content">
+                                    <div class="main">
+                                        <h3 class="name">event.event_name</h3>
+                                        <p class="text-center">event.startdate_vol</p>
+                                        <p class="text-center">event.enddate_vol</p>
+                                    </div>
+                                <div class="footer">
+                                        <!--<button class="btn btn-primary btn-round" onclick = "rotateCard(this)">More</button>-->
+                                    </div>
+                                </div>
+                            </div> <!-- end front panel -->
+                                                              
+                            <div class="back">
+                                    <div class = "table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                            <td><b>Activity</b></td>
+                                            <!-- <td><b>Current Status</b></td>-->
+                                            <td><b>Goal</b></td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for activity in event.activities %}
+                                        <tr>
+                                            <td> {{activity.activity_name}} </td>
+                                             <!-- <td> {{req.sender}} </td>-->
+                                            <td> {{event.activity_goal[activity.activity_name]}}</td>
+                                        </tr>
+                                        {% endfor %}        
+                                    </tbody>
+                                    </table>
+                                    </div>  
+                                
+                                    <div class="footer">
+                                     <!--   <button class="btn btn-primary btn-round" onclick = "rotateCard(this)">Back</button>-->
+                                    </div>                                    
+                            </div> <!-- end back panel -->
+                        </div> <!-- end card -->
         </div><!-- end card container -->
         </div>
-     <div class = "col-md-10 col-md-offset-1">
-        <div class="card-container manual-flip">
+    {% endfor %}
+    {% for project in projects %}
+    <div class = "col-md-4">
+        <div class="card-container ">
         <div class="card">
-            <div class = "front">
-            <div class = "content">
-            {% if is_offlinedonations %}
-            <div class = "table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                    <td><b>Logged at</b></td>
-                    <td><b>Donor Name</b></td>
-                    <td><b>Date of Donation</b></td>
-                    <td><b>Cause</b></td>
-                    <td><b>Amount Donated</b></td>
-                    <td><b>Mode of Payment</b></td>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for req in offline_donations%}
-                <tr>
-                    <td> {{req.date_time_req}} </td>
-                    <td> {{req.donor_name}} </td>
-                    <td> {{req.date_donated}}</td>
-                    <td> {{req.cause}}</td>
-                    <td> {{req.amount_donated}}</td>
-                    <td> {{req.mode_of_payment}}</td>
-                </tr>
-                {% endfor %}        
-            </tbody>
-            </table>
-            </div>
-            <button type="button" onclick = "rotateCard(this)" class="btn btn-info btn-fill btn-block">View a summary of your offline volunteering instances.</button>
-            {% else %}
-                <h2>No donations logged.</h2>
-            {%endif%}            
-            </div>       
-            </div>        
-            <div class = "back">
-            <div class = "content">
-            <h2>Summary</h2>
-            <h3><b>Top Donor</b>: {{top_donor}}</h3>
-            <h3><b>Total Amount Received in Donations</b>: {{total_offline_donation}}</h3>                
-            </div>
-            </div>
-        </div><!-- end card  --> 
+                            <div class="front">
+                                <div class="cover">
+                                    <img src={% static 'assets/img/card-background.png' %} alt = "some background image"/>
+                                </div>
+                                <div class="content">
+                                    <div class="main">
+                                        <h3 class="name">project.event_name</h3>
+                                        <p class="text-center">project.startdate_vol</p>
+                                        <p class="text-center">project.enddate_vol</p>
+                                    </div>
+                                <div class="footer">
+                                        <!--<button class="btn btn-primary btn-round" onclick = "rotateCard(this)">More</button>-->
+                                    </div>
+                                </div>
+                            </div> <!-- end front panel -->
+                                                              
+                            <div class="back">
+                                    <div class = "table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                            <td><b>Activity</b></td>
+                                            <!-- <td><b>Current Status</b></td>-->
+                                            <td><b>Goal</b></td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for activity in project.activities %}
+                                        <tr>
+                                            <td> {{activity.activity_name}} </td>
+                                             <!-- <td> {{req.sender}} </td>-->
+                                            <td> {{project.activity_goal[activity.activity_name]}}</td>
+                                        </tr>
+                                        {% endfor %}        
+                                    </tbody>
+                                    </table>
+                                    </div>  
+                                
+                                    <div class="footer">
+                                       <!--   <button class="btn btn-primary btn-round" onclick = "rotateCard(this)">Back</button>-->
+                                    </div>                                    
+                            </div> <!-- end back panel -->
+                        </div> <!-- end card -->
         </div><!-- end card container -->
-        </div> 
+        </div>
+    {% endfor %}
     
       
     </div>
 </div>
    
-    </div>
-     
-    
-</div>
-
 {%endblock%}
