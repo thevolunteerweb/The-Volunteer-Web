@@ -583,7 +583,7 @@ def ngoevent(request):
         for event in profile_data['events']:
             temp = event.activity_goal
             event.activity_goal = {}
-            event.activity_goal = json.load(temp)
+            event.activity_goal = json.loads(temp)
 
         profile_data['projects'] = list(Projects.objects.all())
 
