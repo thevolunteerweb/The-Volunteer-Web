@@ -505,7 +505,7 @@ def ngoevent(request):
             Events.objects.filter(id=a.id).update(activity_goal=b)
             return HttpResponse(b,content_type="application/text")
         if request.POST.get('type')=='project':
-            a=Projects.objects.create(project_name=request.POST.get('event_name'),organizer=user_id.id,startdate_vol=request.POST.get('startdate_vol'),enddate_vol=request.POST.get('enddate_vol'),starttime_vol=request.POST.get('starttime_vol'),endtime_vol=request.POST.get('endtime_vol'))
+            a=Projects.objects.create(project_name=request.POST.get('project_name'),organizer=user_id.id,startdate_vol=request.POST.get('startdate_vol'),enddate_vol=request.POST.get('enddate_vol'),starttime_vol=request.POST.get('starttime_vol'),endtime_vol=request.POST.get('endtime_vol'))
             b={}
             for ind,x in enumerate(request.POST.getlist('activities[]')):
                 a.activities.add(Activity.objects.get(activityname=x))
