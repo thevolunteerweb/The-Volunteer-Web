@@ -181,7 +181,7 @@ def ngoemp_register(request):
             return HttpResponseRedirect('/')
 
         else:
-            print user_form.errors
+            return HttpResponse('Invalid form')
     else:
         #set forms blank if there is no HTTP POST
         user_form = UserForm()
