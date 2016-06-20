@@ -296,9 +296,7 @@ $("#projectsub").click(function(){
         <div class="card-container ">
         <div class="card">
                             <div class="front">
-                                <div class="cover">
-                                    <img src={% static 'assets/img/card-background.png' %} alt = "some background image"/>
-                                </div>
+                                
                                 <div class="content">
                                     <div class="main">
                                         <h3 class="name">project.event_name</h3>
@@ -322,11 +320,11 @@ $("#projectsub").click(function(){
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            {% for activity in project.activities %}
+                                           {% for key,value in event.activity_goal %}
                                         <tr>
-                                            <td> {{activity.activity_name}} </td>
+                                            <td> {{key}} </td>
                                              <!-- <td> {{req.sender}} </td>-->
-                                            <td> {{project.activity_goal[activity.activity_name]}}</td>
+                                            <td> {{value}}</td>
                                         </tr>
                                         {% endfor %}        
                                     </tbody>
