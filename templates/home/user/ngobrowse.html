@@ -136,8 +136,9 @@ ajaxreq("")
         $('#date_vol').prop('disabled',true) 
         $('#toggleview').prop('disabled',true)  
         }
+
         else{
-        	$('#date_vol').prop('disabled',false) 
+        $('#date_vol').prop('disabled',false) 
         $('#toggleview').prop('disabled',false) 
         }
         
@@ -198,7 +199,7 @@ if(respo[x].activity.length==0){
                 {% csrf_token %}
                 <input id="request_type" name="request_type" type = "hidden" value = "One Time" class="form-control" /> 
                 <input id="ingoid" type = "hidden" name = "recepient" class="form-control" />                   
-                <input id="ingotype" type="hidden" name="req_type"/>
+                <input id="ingotype" type="hidden" name="req_type" value=""/>
                 <div class = "row">
                 <div class="col-sm-4">
                    <div class="form-group label-floating">
