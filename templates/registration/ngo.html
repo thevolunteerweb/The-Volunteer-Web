@@ -44,11 +44,13 @@
                 <div class="col-sm-4 col-lg-offset-3" >
                 <div class="form-group label-floating">
                 <label class="control-label">NGO Domain</label>
+                <div>
                 <select id="id_ngo_domain" class="selectpicker" data-style="form-control" name="ngo_domain">
                 {% for option in array %}
                 <option value="{{option.domain}}">{{option.domain}}</option>
                 {% endfor %}
                 </select>
+                </div>
                 </div>
                 </div>
             </div>

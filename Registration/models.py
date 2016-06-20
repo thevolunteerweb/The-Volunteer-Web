@@ -17,6 +17,7 @@ class UserProfile (models.Model):
     skill_programming = models.IntegerField(default = 0)
     skill_socialmediamarket = models.IntegerField(default = 0)
     skill_sport = models.IntegerField(default = 0)
+    bio = models.TextField(default="")
     interests = models.ManyToManyField(NGODomains)
 
     def __unicode__(self):
