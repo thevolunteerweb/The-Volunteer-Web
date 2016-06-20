@@ -334,6 +334,7 @@ def volunteertable(request):
                     req.recepient=NGOProfile.objects.get(ngo_id=req.recepient).ngo_name
         return render_to_response('home/user/requests.html', profile_data, context)
 
+
 @login_required
 def history(request):
     user_id = User.objects.get(username = request.session['username'])
