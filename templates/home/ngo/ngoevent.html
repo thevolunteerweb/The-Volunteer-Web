@@ -61,16 +61,17 @@ $("#projectsub").click(function(){
     var element =this
     a=[]
     b=[]
-    $('.activities:checked').each(function(){
+    
+    $('.pactivities:checked').each(function(){
         a.push($(this).val())
 
-        b.push($('[data-link="'+$(this).val()+'"]').val())    
+        b.push($('[data-link="p'+$(this).val()+'"]').val())    
 
     })
     $.ajax({
         url : "/home/ngo/event/", // the endpoint
         type : "POST", // http method
-        data : { 'type': "project", 'event_name': $('#event_name').val(),'startdate_vol' : $('#startdate_vol').val(),'starttime_vol' : $('#starttime_vol').val(),'enddate_vol': $('#enddate_vol').val(),'endtime_vol': $('#endtime_vol').val(),'activities[]':a,'activity_goal[]':b},// data sent with the post request
+        data : { 'type': "project", 'project_name': $('#project_name').val(),'startdate_vol' : $('#startdate_vol').val(),'starttime_vol' : $('#starttime_vol').val(),'enddate_vol': $('#enddate_vol').val(),'endtime_vol': $('#endtime_vol').val(),'activities[]':a,'activity_goal[]':b},// data sent with the post request
 
         // handle a successful response
         success : function(result) {
@@ -179,28 +180,28 @@ $("#projectsub").click(function(){
             <form id = "project1">
                    <div class="form-group label-floating">
                    <label class="control-label">Name</label>
-                   <input type = "text" id= "event_name" class=" form-control" />
+                   <input type = "text" id= "project_name" class=" form-control" />
                    </div>
                 
               
                    <div class="form-group label-floating">
                    <label class="control-label">Start Date</label>
-                   <input type = "date" id="startdate_vol" class=" form-control" />
+                   <input type = "date" id="pstartdate_vol" class=" form-control" />
                    </div>
                 
                    <div class="form-group label-floating">
                    <label class="control-label">Start Time</label>
-                   <input type = "time" id= "starttime_vol" class=" form-control" />
+                   <input type = "time" id= "pstarttime_vol" class=" form-control" />
                    </div>
            
                    <div class="form-group label-floating">
                    <label class="control-label">End Date</label>
-                   <input type = "date" id= "enddate_vol" class=" form-control" />
+                   <input type = "date" id= "penddate_vol" class=" form-control" />
                    </div>
                 
                    <div class="form-group label-floating">
                    <label class="control-label">End Time</label>
-                   <input type = "time" id= "endtime_vol" class=" form-control" />
+                   <input type = "time" id= "pendtime_vol" class=" form-control" />
                    </div>
                     <button type="button" onclick = "rotateCard(this)" class="btn btn-default btn-raised btn-fill btn-info">Continue</button>
                 </form>             
@@ -219,14 +220,14 @@ $("#projectsub").click(function(){
 
                     <label class="checkbox checkbox-blue" for="checkbox1">
 
-                    <input type="checkbox" name="activities" value="{{option.activityname}}" class="activities" data-toggle="checkbox">
+                    <input type="checkbox" name="pactivities" value="{{option.activityname}}" class="activities" data-toggle="checkbox">
                        {{option.activityname}}
                        </label>
                        </div>
                     </div>
 
                     <div class="col-sm-4">
-                       <input type = "number" data-link="{{option.activityname}}" class=" form-control" />
+                       <input type = "number" data-link="p{{option.activityname}}" class=" form-control" />
                     </div>
                 </div>
                     
