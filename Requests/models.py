@@ -26,6 +26,7 @@ class Volunteer_ngo_request(models.Model):
     feedback_ngorating =  models.IntegerField(default = 0)
     ngo_complete = models.BooleanField(default = False)
     onetime = models.BooleanField(default = True)
+    req_type=models.TextField(default="NGO")
 
 class Recurring_request(models.Model):
     sender = models.TextField(blank = False, max_length = 20)
@@ -50,6 +51,7 @@ class Events(models.Model):
     activities = models.ManyToManyField(Activity)
     activity_goal = models.TextField(null = True, max_length = 240)
     status = models.TextField(blank = False, default = "Upcoming")
+    event_description = models.TextField(default = "")
 
 class Projects(models.Model):
     date_time_req = models.DateTimeField(auto_now_add=True,null=True)
@@ -59,7 +61,8 @@ class Projects(models.Model):
     enddate_vol = models.DateField(blank = True,null=True)
     starttime_vol = models.TimeField(blank = True)
     endtime_vol = models.TimeField(blank = True)
-    activities = models.TextField(default = "", blank = False, max_length = 240)
+    activities = models.ManyToManyField(Activity)
+    activity_goal = models.TextField(default = "", blank = False, max_length = 240)
     status = models.TextField(blank = False, default = "Upcoming")
-
+    project_description = models.TextField(default = "")
 

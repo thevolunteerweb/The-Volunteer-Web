@@ -206,26 +206,39 @@ def search(request):
     context = RequestContext(request)
     if(request.method =="POST"):
         a=request.POST.get('term')
-        
-        res=list(NGOProfile.objects.filter(ngo_name__istartswith=a))
         result=[]
-        if len(res)==0:
-            return HttpResponse("None")
-        else:
-            for i in res:
+        res=list(NGOProfile.objects.filter(ngo_name__istartswith=a))
+        
+        for i in res:
+            temp={}
+            temp['ngo_name']=i.ngo_name
+            temp['ngo_id']=i.ngo_id
+            temp['address']=i.address
+            temp['ngo_domain']=NGODomains.objects.get(id=i.ngo_domain).domain
+            temp['ngo_description']=i.ngo_description
+            temp['activity']=[]
+            for x in i.activity.filter():
+                temp['activity'].append(x.activityname)
+            temp['type']='NGO'
+            result.append(temp)
+        res=list(Events.objects.filter(organizer__istartswith=a))
+        for i in res:
                 temp={}
-                temp['ngo_name']=i.ngo_name
-                temp['ngo_id']=i.ngo_id
-                temp['address']=i.address
+                temp['ngo_name']=i.event_name
+                temp['ngo_id']=i.id
+                temp['address']=NGOProfile.objects.get(ngo_id=i.organizer).ngo_name
                 temp['ngo_domain']=NGODomains.objects.get(id=i.ngo_domain).domain
-                temp['ngo_description']=i.ngo_description
+                temp['ngo_description']=i.event_description
                 temp['activity']=[]
                 for x in i.activity.filter():
                     temp['activity'].append(x.activityname)
+                temp['type']='Event'
                 result.append(temp)
+        if len(result)==0:
+            return HttpResponse("None")
+        else:
             result=json.dumps(result)
-            return HttpResponse(result,content_type="application/json")
-
+            return HttpResponse(result,content_type="application/json")        
     return render_to_response('home/user/ngobrowse.html',resp,context)
 
 @login_required

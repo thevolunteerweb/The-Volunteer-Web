@@ -50,6 +50,7 @@ function ajaxreq(term)
                                     <div class="main">
                                         <h3 class="name">`+resp[i].ngo_name+`</h3>
                                         <p class="text-center">`+resp[i].address+`</p>
+                                        <p class="text-center">`+resp[i].type+`</p>
                                     </div>
                                 </div>
                             </div> <!-- end front panel -->
@@ -230,6 +231,7 @@ if(respo[x].activity.length==0){
              Recurring
             <form id="recurring_form" method = "POST" action="/request/volunteer/" enctype="multipart/form-data">
                 {% csrf_token %}
+
                  <input id="request_type" type = "hidden" value = "Recurring" class="form-control" /> 
                 <input id="rngoid" type = "hidden" name = "recepient" class="form-control" />                   
                 <div class = "row">

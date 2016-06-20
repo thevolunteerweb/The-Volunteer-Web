@@ -22,6 +22,7 @@ def volunteer_request(request):
                 new_request=request_form.save(commit=False)
                 user_id = User.objects.get(username = request.session['username'])
                 new_request.sender = user_id.id
+                new_request.req_type=request.POST.get('req_type')
                 new_request.save()
             else:
                 print request_form.errors
