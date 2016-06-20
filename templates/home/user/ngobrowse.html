@@ -65,7 +65,7 @@ function ajaxreq(term)
                                         <p class="text-center">`+resp[i].ngo_description+`</p>
                                     </div>
                                     <div class="footer">
-                                        <button data-count=`+i+` class="reqbut btn btn-primary btn-round" id="r`+resp[i].ngo_id+`" data-toggle ="modal" data-target ="#volunteer_request" data-type="`+resp[i].type+`">Volunteer Here</button>
+                                        <button data-count=`+i+` class="reqbut btn btn-primary btn-round" id="r`+resp[i].ngo_id+`" data-toggle ="modal" data-target ="#volunteer_request" data-type="`+resp[i].type+`" data-date="`+resp[i].date+`">Volunteer Here</button>
                                     </div>
                                     </div>
                                 </div>
@@ -131,6 +131,11 @@ ajaxreq("")
         $('#ingoid').val($(this).attr('id').slice(1))
         $('#rngoid').val($(this).attr('id').slice(1))
         $('ingotype').val($(this).attr('data-type'))
+        if($(this).attr('data-type')=='Event'||$(this).attr('data-type')=='Project'){
+        $('#date_vol').val($(this).attr('data-date'))
+        $('#date_vol').prop('disabled',true)  
+        }
+        
   $('#actlisto').html('')
   $('#actlistr').html('')
   x=parseInt($(this).attr('data-count'))
@@ -193,7 +198,7 @@ if(respo[x].activity.length==0){
                 <div class="col-sm-4">
                    <div class="form-group label-floating">
                    <label class="control-label"></label>
-                   <input type = "date" name = "date_vol" class=" form-control" />
+                   <input type = "date" id="date_vol" name = "date_vol" class=" form-control" />
                    </div>
                 </div>
                 </div>

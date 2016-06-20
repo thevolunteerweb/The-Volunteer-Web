@@ -221,6 +221,7 @@ def search(request):
             for x in i.activity.filter():
                 temp['activity'].append(x.activityname)
             temp['type']='NGO'
+            temp['date']=""
             result.append(temp)
         res=list(Events.objects.filter(organizer__istartswith=a))
         for i in res:
@@ -235,6 +236,7 @@ def search(request):
             for x in i.activities.filter():
                 temp['activity'].append(x.activityname)
             temp['type']='Event'
+            temp['date']=i.startdate_vol
             result.append(temp)
         res=list(Projects.objects.filter(organizer__istartswith=a))
         for i in res:
@@ -249,6 +251,7 @@ def search(request):
             for x in i.activities.filter():
                 temp['activity'].append(x.activityname)
             temp['type']='Project'
+            temp['date']=i.startdate_vol
             result.append(temp)
         if len(result)==0:
             return HttpResponse("None")
