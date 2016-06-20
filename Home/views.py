@@ -549,12 +549,11 @@ def ngobalance(request):
 
 
 @login_required
-@login_required
 def ngoevent(request):
     data = {}
     user_id = User.objects.get(username = request.session['username'])
-    data['name'] = user_id.first_name
-    data['array']=list(Activity.objects.filter())
+    profile_data['name'] = user_id.first_name
+    profile_data['array']=list(Activity.objects.filter())
     context = RequestContext(request)
     if request.method=='POST':
         if request.POST.get('type')=='event':
@@ -579,6 +578,25 @@ def ngoevent(request):
         else:
             return HttpResponse("Failed",content_type="application/text")
     else:
+        profile_data['events'] = list(Events.objects.all())
+        for event in profile_data['events']:
+            temp = events.activity_goal
+            event.activity_goal = {}
+            event.activity_goal = json.dump(temp)
+
+        profile_data['projects'] = list(Projects.objects.all())
+
+        if len(profile_data['events']) == 0:
+            profile_data['is_events']= False
+        else:
+            profile_data['is_events'] = True
+
+        if len(profile_data['projects']) == 0:
+            profile_data['is_projects']= False
+        else:
+            profile_data['is_projects'] = True
+
+
         return render_to_response('home/ngo/ngoevent.html', data, context)
 
 
