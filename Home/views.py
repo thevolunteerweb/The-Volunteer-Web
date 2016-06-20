@@ -315,22 +315,30 @@ def history(request):
     profile_data['ngocancel_requests'] = list(Volunteer_ngo_request.objects.filter(sender = user_id.id, status = "NGO Abort"))
     if len(profile_data['ngocancel_requests']) == 0:
         profile_data['is_ngo_cancelrequests'] = False
-
+    else:
+        for req in profile_data['ngocancel_requests']:
+            req.recepient=NGOProfile.objects.get(ngo_id=req.recepient).ngo_name
     profile_data['is_completedrequests'] = True
     profile_data['completed_requests'] = list(Volunteer_ngo_request.objects.filter(Q(sender =user_id.id , status = "User Complete") | Q(sender = user_id.id, status = "Completed")))
     if len(profile_data['completed_requests']) == 0:
         profile_data['is_completedrequests'] = False
-
+     else:
+        for req in profile_data['completed_requests']:
+            req.recepient=NGOProfile.objects.get(ngo_id=req.recepient).ngo_name
     profile_data['is_rejectedrequests'] = True
     profile_data['rejected_requests'] = list(Volunteer_ngo_request.objects.filter(sender = user_id.id, status = "Reject"))
     if len(profile_data['rejected_requests']) == 0:
-        profile_data['is_rejectedrequests'] = False
-
+        profile_data['rejected_requests'] = False
+     else:
+        for req in profile_data['rejected_requests']:
+            req.recepient=NGOProfile.objects.get(ngo_id=req.recepient).ngo_name
     profile_data['is_user_cancelrequests'] = True
     profile_data['usercancel_requests'] = list(Volunteer_ngo_request.objects.filter(sender = user_id.id, status = "User Abort"))
     if len(profile_data['usercancel_requests']) == 0:
         profile_data['is_user_cancelrequests'] = False
-
+     else:
+        for req in profile_data['usercancel_requests']:
+            req.recepient=NGOProfile.objects.get(ngo_id=req.recepient).ngo_name
     return render_to_response('home/user/history.html', profile_data, context)
 
 
