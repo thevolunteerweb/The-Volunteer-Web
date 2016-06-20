@@ -230,7 +230,7 @@ def search(request):
             temp['ngo_domain']=NGODomains.objects.get(id=NGOProfile.objects.get(ngo_id=i.organizer).ngo_domain).domain
             temp['ngo_description']=i.event_description
             temp['activity']=[]
-            for x in i.activity.filter():
+            for x in i.activities.filter():
                 temp['activity'].append(x.activityname)
             temp['type']='Event'
             result.append(temp)
