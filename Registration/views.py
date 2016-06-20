@@ -107,7 +107,7 @@ def update_profile(request):
         try:
             UserProfile.objects.get(user_id=request.user)
         except:
-            p = UserProfile.objects.create(user_id=request.user.id, address=request.POST.get('address'), skill_math=request.POST.get('math'),skill_english=request.POST.get('english'),skill_science=request.POST.get('science'),skill_ict=request.POST.get('ict'),skill_socialmediamarket=request.POST.get('marketing'),skill_sport=request.POST.get('sport'),skill_programming=request.POST.get('programming'))
+            p = UserProfile.objects.create(bio=request.POST.get('about'),user_id=request.user.id, address=request.POST.get('address'), skill_math=request.POST.get('math'),skill_english=request.POST.get('english'),skill_science=request.POST.get('science'),skill_ict=request.POST.get('ict'),skill_socialmediamarket=request.POST.get('marketing'),skill_sport=request.POST.get('sport'),skill_programming=request.POST.get('programming'))
             for a in request.POST.getlist("interests"):
                 p.interests.add(NGODomains.objects.get(domain=a))
             return HttpResponseRedirect("/")
