@@ -130,7 +130,7 @@ ajaxreq("")
     $(document).on('click','.reqbut',function(){
         $('#ingoid').val($(this).attr('id').slice(1))
         $('#rngoid').val($(this).attr('id').slice(1))
-        $('ingotype').val($(this).attr('data-type'))
+        $('#ingotype').val($(this).attr('data-type'))
         if($(this).attr('data-type')=='Event'||$(this).attr('data-type')=='Project'){
         
         $('#date_vol').prop('disabled',true) 
@@ -199,7 +199,7 @@ if(respo[x].activity.length==0){
                 {% csrf_token %}
                 <input id="request_type" name="request_type" type = "hidden" value = "One Time" class="form-control" /> 
                 <input id="ingoid" type = "hidden" name = "recepient" class="form-control" />                   
-                <input id="ingotype" type="hidden" name="req_type" value=""/>
+                <input id="ingotype" type="hidden" name="req_type" value="" />
                 <div class = "row">
                 <div class="col-sm-4">
                    <div class="form-group label-floating">
