@@ -300,6 +300,10 @@ def volunteertable(request):
         profile_data['is_ongoingrequests'] = True
         profile_data['upcoming_requests'] = list()
         profile_data['ongoing_requests'] = list()
+        profile_data['event_upcoming_requests'] = list()
+        profile_data['event_ongoing_requests'] = list()
+        profile_data['project_upcoming_requests'] = list()
+        profile_data['project_ongoing_requests'] = list()
         requests = list(Volunteer_ngo_request.objects.filter(sender = user_id.id, status ="Accept", req_type = "NGO"))
         for req in requests:
             if req.date_vol > datetime.date.today():
