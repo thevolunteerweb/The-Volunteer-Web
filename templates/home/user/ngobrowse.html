@@ -49,6 +49,7 @@ function ajaxreq(term)
                                 <div class="content">
                                     <div class="main">
                                         <h3 class="name">`+resp[i].ngo_name+`</h3>
+                                        <h4 class="name">`+resp[i].name+`</h4>
                                         <p class="text-center">`+resp[i].address+`</p>
                                         <p class="text-center">`+resp[i].type+`</p>
                                     </div>
@@ -64,7 +65,7 @@ function ajaxreq(term)
                                         <p class="text-center">`+resp[i].ngo_description+`</p>
                                     </div>
                                     <div class="footer">
-                                        <button data-count=`+i+` class="reqbut btn btn-primary btn-round" id="r`+resp[i].ngo_id+`" data-toggle ="modal" data-target ="#volunteer_request">Volunteer Here</button>
+                                        <button data-count=`+i+` class="reqbut btn btn-primary btn-round" id="r`+resp[i].ngo_id+`" data-toggle ="modal" data-target ="#volunteer_request" data-type="`+resp[i].type+`">Volunteer Here</button>
                                     </div>
                                     </div>
                                 </div>
@@ -129,7 +130,7 @@ ajaxreq("")
     $(document).on('click','.reqbut',function(){
         $('#ingoid').val($(this).attr('id').slice(1))
         $('#rngoid').val($(this).attr('id').slice(1))
-        
+        $('ingotype').val($(this).attr('data-type'))
   $('#actlisto').html('')
   $('#actlistr').html('')
   x=parseInt($(this).attr('data-count'))
@@ -187,6 +188,7 @@ if(respo[x].activity.length==0){
                 {% csrf_token %}
                 <input id="request_type" name="request_type" type = "hidden" value = "One Time" class="form-control" /> 
                 <input id="ingoid" type = "hidden" name = "recepient" class="form-control" />                   
+                <input id="ingotype" type="hidden" name="req_type"/>
                 <div class = "row">
                 <div class="col-sm-4">
                    <div class="form-group label-floating">

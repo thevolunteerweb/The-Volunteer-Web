@@ -212,6 +212,7 @@ def search(request):
         for i in res:
             temp={}
             temp['ngo_name']=i.ngo_name
+            temp['name']=""
             temp['ngo_id']=i.ngo_id
             temp['address']=i.address
             temp['ngo_domain']=NGODomains.objects.get(id=i.ngo_domain).domain
@@ -225,14 +226,29 @@ def search(request):
         for i in res:
             temp={}
             temp['ngo_name']=i.event_name
+            temp['name']=NGOProfile.objects.get(ngo_id=i.organizer).ngo_name
             temp['ngo_id']=i.id
-            temp['address']=NGOProfile.objects.get(ngo_id=i.organizer).ngo_name
+            temp['address']=NGOProfile.objects.get(ngo_id=i.organizer).address
             temp['ngo_domain']=NGODomains.objects.get(id=NGOProfile.objects.get(ngo_id=i.organizer).ngo_domain).domain
             temp['ngo_description']=i.event_description
             temp['activity']=[]
             for x in i.activities.filter():
                 temp['activity'].append(x.activityname)
             temp['type']='Event'
+            result.append(temp)
+        res=list(Projects.objects.filter(organizer__istartswith=a))
+        for i in res:
+            temp={}
+            temp['ngo_name']=i.project_name
+            temp['name']=NGOProfile.objects.get(ngo_id=i.organizer).ngo_name
+            temp['ngo_id']=i.id
+            temp['address']=NGOProfile.objects.get(ngo_id=i.organizer).address
+            temp['ngo_domain']=NGODomains.objects.get(id=NGOProfile.objects.get(ngo_id=i.organizer).ngo_domain).domain
+            temp['ngo_description']=i.project_description
+            temp['activity']=[]
+            for x in i.activities.filter():
+                temp['activity'].append(x.activityname)
+            temp['type']='Project'
             result.append(temp)
         if len(result)==0:
             return HttpResponse("None")
@@ -488,6 +504,16 @@ def ngoevent(request):
             b=json.dumps(b)
             Events.objects.filter(id=a.id).update(activity_goal=b)
             return HttpResponse(b,content_type="application/text")
+        if request.POST.get('type')=='project':
+            a=Projects.objects.create(project_name=request.POST.get('event_name'),organizer=user_id.id,startdate_vol=request.POST.get('startdate_vol'),enddate_vol=request.POST.get('enddate_vol'),starttime_vol=request.POST.get('starttime_vol'),endtime_vol=request.POST.get('endtime_vol'))
+            b={}
+            for ind,x in enumerate(request.POST.getlist('activities[]')):
+                a.activities.add(Activity.objects.get(activityname=x))
+                b[str(x)]=int(request.POST.getlist('activity_goal[]')[ind])
+            b=json.dumps(b)
+            Events.objects.filter(id=a.id).update(activity_goal=b)
+            return HttpResponse(b,content_type="application/text")
+        
         else:
             return HttpResponse("Failed",content_type="application/text")
     else:

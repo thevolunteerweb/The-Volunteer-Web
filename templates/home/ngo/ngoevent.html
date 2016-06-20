@@ -70,7 +70,7 @@ $("#projectsub").click(function(){
     $.ajax({
         url : "/home/ngo/event/", // the endpoint
         type : "POST", // http method
-        data : { 'type': "event", 'event_name': $('#event_name').val(),'startdate_vol' : $('#startdate_vol').val(),'starttime_vol' : $('#starttime_vol').val(),'enddate_vol': $('#enddate_vol').val(),'endtime_vol': $('#endtime_vol').val(),'activities[]':a,'activity_goal[]':b},// data sent with the post request
+        data : { 'type': "project", 'event_name': $('#event_name').val(),'startdate_vol' : $('#startdate_vol').val(),'starttime_vol' : $('#starttime_vol').val(),'enddate_vol': $('#enddate_vol').val(),'endtime_vol': $('#endtime_vol').val(),'activities[]':a,'activity_goal[]':b},// data sent with the post request
 
         // handle a successful response
         success : function(result) {
