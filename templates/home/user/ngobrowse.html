@@ -3,7 +3,7 @@
 {% block browse %}active{% endblock %}
 {% block lbrowse %}#{% endblock %}
 {%block body%}
-	
+  
          <div class="wrapper">
             <div class="container-fluid">
                 <div class="row">
@@ -18,154 +18,134 @@
 
 <div id="result"></div>
 <script type="text/javascript">
+var respo=[]
+function ajaxreq(term)
+{
+  $.ajax({
+        url : "/home/browse/ngos/", // the endpoint
+        type : "POST", // http method
+        data : { 'term' : term}, // data sent with the post request
+
+        // handle a successful response
+        success : function(resp) {
+            
+            if(resp=="None"){
+                $("#result").html("Uh Oh! Looks like we couldn't find a match!")
+            }
+            else{
+              respo=resp
+                htm=`<div class = row>`
+                for (var i = 0; i < resp.length; i++) {
+                htm+=`<div class = "col-sm-3 col-lg-offset 3">
+                        <div class="card-container">
+                        <div class="card">
+                            <div class="front">
+                                <div class="cover">
+                                    <img src={% static 'assets/img/card-background.png' %} alt = "some background image"/>
+                                </div>
+                                <div class="user">
+                                    <img class="img-circle" src={% static 'assets/img/logo.png' %} alt = "Insert logo here"/>
+                                </div>
+                                <div class="content">
+                                    <div class="main">
+                                        <h3 class="name">`+resp[i].ngo_name+`</h3>
+                                        <p class="text-center">`+resp[i].address+`</p>
+                                    </div>
+                                </div>
+                            </div> <!-- end front panel -->
+                            <div class="back">
+                                <div class="header">
+                                    <h5 class="motto">`+resp[i].ngo_name+`</h5>
+                                </div>
+                                <div class="content">
+                                    <div class="main">
+                                        <h4 class="text-center">`+resp[i].ngo_domain+`</h4>
+                                        <p class="text-center">`+resp[i].ngo_description+`</p>
+                                    </div>
+                                    <div class="footer">
+                                        <button data-count=`+i+` class="reqbut btn btn-primary btn-round" id="r`+resp[i].ngo_id+`" data-toggle ="modal" data-target ="#volunteer_request">Volunteer Here</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end back panel -->
+                        </div> <!-- end card -->
+                    </div> <!-- end card-container -->`}
+              htm+=`</div>`             
+             $("#result").html(htm)
+            }
+            
+             },
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+             alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+}
 var respo
 $(document).ready(function(){
-	var element
-
-$.ajax({
-        url : "/home/browse/ngos/", // the endpoint
-        type : "POST", // http method
-        data : { 'term' : ""}, // data sent with the post request
-
-        // handle a successful response
-        success : function(resp) {
-            
-            if(resp=="None"){
-                $("#result").html("Uh Oh! Looks like we couldn't find a match!")
-            }
-            else{
-                htm=`<div class = row>`
-                for (var i = 0; i < resp.length; i++) {
-                htm+=`<div class = "col-sm-3 col-lg-offset 3">
-                        <div class="card-container">
-                        <div class="card">
-                            <div class="front">
-                                <div class="cover">
-                                    <img src={% static 'assets/img/card-background.png' %} alt = "some background image"/>
-                                </div>
-                                <div class="user">
-                                    <img class="img-circle" src={% static 'assets/img/logo.png' %} alt = "Insert logo here"/>
-                                </div>
-                                <div class="content">
-                                    <div class="main">
-                                        <h3 class="name">`+resp[i].fields.ngo_name+`</h3>
-                                        <p class="text-center">`+resp[i].fields.address+`</p>
-                                    </div>
-                                </div>
-                            </div> <!-- end front panel -->
-                            <div class="back">
-                                <div class="header">
-                                    <h5 class="motto">`+resp[i].fields.ngo_name+`</h5>
-                                </div>
-                                <div class="content">
-                                    <div class="main">
-                                        <h4 class="text-center">`+resp[i].fields.ngo_domain+`</h4>
-                                        <p class="text-center">`+resp[i].fields.ngo_description+`</p>
-                                    </div>
-                                    <div class="footer">
-                                        <button class="reqbut btn btn-primary btn-round" id="r`+resp[i].fields.ngo_id+`" data-toggle ="modal" data-target ="#volunteer_request">Volunteer Here</button>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end back panel -->
-                        </div> <!-- end card -->
-                    </div> <!-- end card-container -->`}
-              htm+=`</div>`             
-             $("#result").html(htm)
-            }
-            
-             },
-        // handle a non-successful response
-        error : function(xhr,errmsg,err) {
-             alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-        }
-    });
+  var element
+var a
+    
+ajaxreq("")
     $('#search').on('input',function(){
-    	
-        $.ajax({
-        url : "/home/browse/ngos/", // the endpoint
-        type : "POST", // http method
-        data : { 'term' : $(this).val()}, // data sent with the post request
-
-        // handle a successful response
-        success : function(resp) {
-            
-            if(resp=="None"){
-                $("#result").html("Uh Oh! Looks like we couldn't find a match!")
-            }
-            else{
-                htm=`<div class = row>`
-                for (var i = 0; i < resp.length; i++) {
-                htm+=`<div class = "col-sm-3 col-lg-offset 3">
-                        <div class="card-container">
-                        <div class="card">
-                            <div class="front">
-                                <div class="cover">
-                                    <img src={% static 'assets/img/card-background.png' %} alt = "some background image"/>
-                                </div>
-                                <div class="user">
-                                    <img class="img-circle" src={% static 'assets/img/logo.png' %} alt = "Insert logo here"/>
-                                </div>
-                                <div class="content">
-                                    <div class="main">
-                                        <h3 class="name">`+resp[i].fields.ngo_name+`</h3>
-                                        <p class="text-center">`+resp[i].fields.address+`</p>
-                                    </div>
-                                </div>
-                            </div> <!-- end front panel -->
-                            <div class="back">
-                                <div class="header">
-                                    <h5 class="motto">`+resp[i].fields.ngo_name+`</h5>
-                                </div>
-                                <div class="content">
-                                    <div class="main">
-                                        <h4 class="text-center">`+resp[i].fields.ngo_domain+`</h4>
-                                        <p class="text-center">`+resp[i].fields.ngo_description+`</p>
-                                    </div>
-                                    <div class="footer">
-                                        <button class="reqbut btn btn-primary btn-round" id="r`+resp[i].fields.ngo_id+`" data-toggle ="modal" data-target ="#volunteer_request">Volunteer Here</button>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end back panel -->
-                        </div> <!-- end card -->
-                    </div> <!-- end card-container -->`}
-              htm+=`</div>`             
-             $("#result").html(htm)
-            }
-            
-             },
-        // handle a non-successful response
-        error : function(xhr,errmsg,err) {
-             alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-        }
-    });
+      
+        ajaxreq($(this).val())
         
     });
-    var a_switch
+    a=0
+    $("#reqtoggle").on('change',function(){
+        a=1-a
+        if(a==0){
+            $("#eventreq").css("display","block")
+
+            $("#recreq").css("display","none")
+          }
+          if(a==1){
+            $("#eventreq").css("display","none")
+
+            $("#recreq").css("display","block")
+          }
+    })
+        
+    $("#label_onetime").css("display","none")
     a_switch = 0
     $("#toggleview").click(function(){
         a_switch = 1 - a_switch
          if(a_switch == 0){
-            $("#onereq").css("display","block")
-            $("#label_onetime").css("display","none")
-            $("#label_recur").css("display","block")
-            $("#recurreq").css("display","none")
+            $("#eventreq").css("display","block")
+            $("#label_onetime").css("display","block")
+            $("#label_recur").css("display","none")
+            $("#recreq").css("display","none")
           }
           if(a_switch == 1){
-            $("#onereq").css("display","none")
-            $("#label_recur").css("display","none")
-            $("#label_onetime").css("display","block")
-            $("#recurreq").css("display","block")
+            $("#eventreq").css("display","none")
+            $("#label_recur").css("display","block")
+            $("#label_onetime").css("display","none")
+            $("#recreq").css("display","block")
           }
   });
-        
-
 })
-    
     $(document).on('click','.reqbut',function(){
-        $('#ongoid').val($(this).attr('id').slice(1))
+        $('#ingoid').val($(this).attr('id').slice(1))
         $('#rngoid').val($(this).attr('id').slice(1))
+        
+  $('#actlisto').html('')
+  $('#actlistr').html('')
+  x=parseInt($(this).attr('data-count'))
+  
+
+  for (var i = 0; i < respo[x].activity.length; i++) {
+  
+      $('#actlisto').append('<option value="'+respo[x].activity[i]+'">'+respo[x].activity[i]+'</option>')
+      $('#actlistr').append('<option value="'+respo[x].activity[i]+'">'+respo[x].activity[i]+'</option>')
+}
+
+if(respo[x].activity.length==0){
+  $('#actlisto').html('<option value="None">No activities</option>')
+
+  $('#actlistr').html('<option value="None">No activities</option>')
+  
+}
     })      
 </script>
 
@@ -193,16 +173,19 @@ $.ajax({
       </div>
       <div class="modal-body">
       <div class="social-area">   
-        <button id = "toggleview" class = "btn btn-filled btn-block"><div id = "label_onetime" style="display:none;">Create a one time volunteering request instead</div><div id = "label_recur" >Create a recurring volunteering request instead</div></button>
+        <button id = "toggleview" class = "btn btn-filled btn-block"><div id = "label_onetime">Recurring</div><div id = "label_recur">One Time</div></button>
           </div>
-        <div class = "container">
+    
+            </div>
+
+         <div class = "container">
             <h4><b>Submit your volunteering request here</b></h4>
-            <div id="onereq"> 
+            <div id="eventreq"> 
             Single
             <form id="request_form" method = "POST" action="/request/volunteer/" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input id="request_type" name="request_type" type = "hidden" value = "One Time" class="form-control" /> 
-                <input id="ongoid" type = "hidden" name = "recepient" class="form-control" />                   
+                <input id="ingoid" type = "hidden" name = "recepient" class="form-control" />                   
                 <div class = "row">
                 <div class="col-sm-4">
                    <div class="form-group label-floating">
@@ -223,7 +206,8 @@ $.ajax({
                 <div class="col-sm-4">
                    <div class="form-group label-floating">
                    <label class="control-label"></label>
-                   <input type = "text" name = "activity" class=" form-control" />
+                   <select id="actlisto" name="activity">
+                   </select>
                    </div>
                 </div>
                 </div>
@@ -237,14 +221,14 @@ $.ajax({
                 </div>                
                 <div class = "row">
                 <div class="col-sm-4">
-                   <input type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised btn-fill btn-info"/>                   
+                   <input id="submitbuto" type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised btn-fill btn-info"/>                   
                 </div>
                 </div>
              </form>
              </div>
-             <div id="recurreq" style="display:none;"> 
+             <div id="recreq" style="display:none;"> 
              Recurring
-            <form id="recform" method = "POST" action="/request/volunteer/" enctype="multipart/form-data">
+            <form id="recurring_form" method = "POST" action="/request/volunteer/" enctype="multipart/form-data">
                 {% csrf_token %}
                  <input id="request_type" type = "hidden" value = "Recurring" class="form-control" /> 
                 <input id="rngoid" type = "hidden" name = "recepient" class="form-control" />                   
@@ -284,7 +268,8 @@ $.ajax({
                 <div class="col-sm-4">
                    <div class="form-group label-floating">
                    <label class="control-label"></label>
-                   <input type = "text" name = "activity" class=" form-control" />
+                   <select id="actlistr" name="activity">
+                   </select>
                    </div>
                 </div>
                 </div>
@@ -298,15 +283,12 @@ $.ajax({
                 </div>                
                 <div class = "row">
                 <div class="col-sm-4">
-                   <input type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised btn-fill btn-info"/>                   
+                   <input id="submitbutr" type = "submit" name = "submit" value = "Submit" class="btn btn-default btn-raised btn-fill btn-info"/>                   
                 </div>
                 </div>
              </form>
              </div>
             </div>
-            </div>
-
-         
         </div>
     </div>
   </div>
