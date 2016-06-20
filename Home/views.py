@@ -384,7 +384,7 @@ def editprofile(request):
     profile_data['skillenglish'] = UserProfile.objects.get(user = user_id).skill_english
     profile_data['skillsport'] = UserProfile.objects.get(user = user_id).skill_sport
     profile_data['skillprog'] = UserProfile.objects.get(user = user_id).skill_programming
-    profile_data['about'] = ""
+    profile_data['about'] = UserProfile.objects.get(user = user_id).bio
     profile_data['address'] = UserProfile.objects.get(user = user_id).address
 
     if request.method == 'POST':
