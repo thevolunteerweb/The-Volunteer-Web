@@ -24,8 +24,10 @@ def volunteer_request(request):
                 new_request.sender = user_id.id
                 if request.POST.get('req_type')=='Event':
                     new_request.status='Accept'
+                    new_request.date_vol=Events.objects.get(id=new_request.recepient).startdate_vol
                 if request.POST.get('req_type')=='Project':
                     new_request.status='Accept'
+                    new_request.date_vol=Projects.objects.get(id=new_request.recepient).startdate_vol
                 new_request.req_type=request.POST.get('req_type')
 
                 new_request.save()
