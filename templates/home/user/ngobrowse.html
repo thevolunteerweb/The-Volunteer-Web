@@ -133,7 +133,12 @@ ajaxreq("")
         $('ingotype').val($(this).attr('data-type'))
         if($(this).attr('data-type')=='Event'||$(this).attr('data-type')=='Project'){
         
-        $('#date_vol').prop('disabled',true)  
+        $('#date_vol').prop('disabled',true) 
+        $('#toggleview').prop('disabled',true)  
+        }
+        else{
+        	$('#date_vol').prop('disabled',false) 
+        $('#toggleview').prop('disabled',false) 
         }
         
   $('#actlisto').html('')
