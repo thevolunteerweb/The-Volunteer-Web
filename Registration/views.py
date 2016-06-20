@@ -25,7 +25,7 @@ def user_register(request):
             user.set_password(user.password)
             user.save()
             #User Profile Instance
-            a=sendEmail('tvw@gmail.com','Hi from TVW',user.email,'Welcome to TheVolunteerWeb! Have fun volunteering!',SGapikey)
+            a=sendEmail(SGapikey,'tvw@gmail.com','Hi from TVW',user.email,'Welcome to TheVolunteerWeb! Have fun volunteering!')
             luser = authenticate(username = request.POST.get('username'), password = request.POST.get('password'))
 
             if luser:
