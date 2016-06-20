@@ -221,13 +221,13 @@ def search(request):
                 temp['activity'].append(x.activityname)
             temp['type']='NGO'
             result.append(temp)
-        res=list(Events.objects.filter(organizer__istartswith=a))
+        res=list(Events.objects.filter(organizer__istartswith=a)
         for i in res:
                 temp={}
                 temp['ngo_name']=i.event_name
                 temp['ngo_id']=i.id
                 temp['address']=NGOProfile.objects.get(ngo_id=i.organizer).ngo_name
-                temp['ngo_domain']=NGODomains.objects.get(id=i.ngo_domain).domain
+                temp['ngo_domain']=NGODomains.objects.get(id=NGOProfile.objects.get(ngo_id=i.organizer).ngo_domain).domain
                 temp['ngo_description']=i.event_description
                 temp['activity']=[]
                 for x in i.activity.filter():
