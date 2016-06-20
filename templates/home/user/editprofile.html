@@ -59,13 +59,13 @@
                     <br>
 <form id="profile_form" method = "POST" action="/home/editprofile/" enctype="multipart/form-data">
                {% csrf_token %}
-                <input type="hidden" name="math" id="iskillmath" />
-                <input type="hidden" name="science" id="iskillscience" />
-                <input type="hidden" name="marketing" id="iskillmarketing" />
-                <input type="hidden" name="ict" id="iskillict" />
-                <input type="hidden" name="programming" id="iskillprogramming" />                  
-                <input type="hidden" name="english" id="iskillenglish" />
-                <input type="hidden" name="sport" id="iskillsport" />
+                <input type="hidden" value="{{skillmath}}" name="math" id="iskillmath" />
+                <input type="hidden" value="{{skillscience}}" name="science" id="iskillscience" />
+                <input type="hidden" value="{{skillmarket}}" name="marketing" id="iskillmarketing" />
+                <input type="hidden" value="{{skillict}}" name="ict" id="iskillict" />
+                <input type="hidden" value="{{skillprog}}" name="programming" id="iskillprogramming" />                  
+                <input type="hidden" value="{{skillenglish}}" name="english" id="iskillenglish" />
+                <input type="hidden" value="{{skillsport}}" name="sport" id="iskillsport" />
                 <div class = "container" id = "aboutuser">
                 <div class = "row">
                 <div class="col-sm-4 col-lg-offset-3" >
@@ -86,6 +86,7 @@
                 <div class = "row">
                 <div class="col-sm-4 col-lg-offset-3" >
                 <button id = "submit" class="btn btn-raised btn-default">Update</button>
+
                 </div>
                 </div>
                 </div>
@@ -133,7 +134,7 @@
 
     });
      $("#skillmath").slider({
-            value: 0,
+            value: {{skillmath}},
             orientation: "horizontal",
             range: "min",
             min: 0,
