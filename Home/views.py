@@ -373,11 +373,25 @@ def history(request):
 
 @login_required
 def editprofile(request):
-    data = {}
     user_id = User.objects.get(username = request.session['username'])
-    data['name'] = user_id.first_name
+    profile_data['name'] = user_id.first_name
     context = RequestContext(request)
-    return render_to_response('home/user/editprofile.html', data, context)
+
+    profile_data['skillmath'] = UserProfile.objects.get(user = user_id).skill_math
+    profile_data['skillict'] = UserProfile.objects.get(user = user_id).skill_ict
+    profile_data['skillmarket'] = UserProfile.objects.get(user = user_id).skill_socialmediamarket
+    profile_data['skillscience'] = UserProfile.objects.get(user = user_id).skill_science
+    profile_data['skillenglish'] = UserProfile.objects.get(user = user_id).skill_english
+    profile_data['skillsport'] = UserProfile.objects.get(user = user_id).skill_sport
+    profile_data['skillprog'] = UserProfile.objects.get(user = user_id).skill_programming
+    profile_data['about'] = ""
+    profile_data['address'] = UserProfile.objects.get(user = user_id).address
+
+    if request.method == 'POST':
+       UserProfile.objects.filter(user = user_id).update(address=request.POST.get('address'), skill_math = request.POST.get('math'))
+       return HttpResponseRedirect("/home/editprofile")
+
+    return render_to_response('home/user/editprofile.html', profile_data, context)
 
 
 @login_required
