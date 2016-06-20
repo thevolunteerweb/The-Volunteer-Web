@@ -176,7 +176,7 @@ def ngoemp_register(request):
             try:
                 NGOEmployeeProfile.objects.get(user_id=user.id)
             except:
-                employee=NGOEmployeeProfile.objects.create(position="Employee",admin=False,user_id=user.id,ngo_id=NGOProfile.objects.get(ngo_name=request.POST.get('ngo_name').id))
+                employee=NGOEmployeeProfile.objects.create(position="Employee",admin=False,user_id=user.id,ngo_id=NGOProfile.objects.get(ngo_name=request.POST.get('ngo_name')).id)
                 registered = True
             return HttpResponseRedirect('/')
 
