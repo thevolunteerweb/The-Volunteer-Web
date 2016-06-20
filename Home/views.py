@@ -208,7 +208,7 @@ def search(request):
         a=request.POST.get('term')
         result=[]
         res=list(NGOProfile.objects.filter(ngo_name__istartswith=a))
-        
+
         for i in res:
             temp={}
             temp['ngo_name']=i.ngo_name
@@ -254,7 +254,7 @@ def search(request):
             return HttpResponse("None")
         else:
             result=json.dumps(result)
-            return HttpResponse(result,content_type="application/json")        
+            return HttpResponse(result,content_type="application/json")
     return render_to_response('home/user/ngobrowse.html',resp,context)
 
 @login_required
@@ -300,7 +300,7 @@ def volunteertable(request):
         profile_data['is_ongoingrequests'] = True
         profile_data['upcoming_requests'] = list()
         profile_data['ongoing_requests'] = list()
-        requests = list(Volunteer_ngo_request.objects.filter(sender = user_id.id, status ="Accept"))
+        requests = list(Volunteer_ngo_request.objects.filter(sender = user_id.id, status ="Accept", req_type = "NGO"))
         for req in requests:
             if req.date_vol > datetime.date.today():
                 profile_data['upcoming_requests'].append(req)
@@ -309,21 +309,56 @@ def volunteertable(request):
             else:
                  profile_data['ongoing_requests'].append(req)
 
-        ngo_completed = list(Volunteer_ngo_request.objects.filter(sender =user_id.id , status = "NGO Complete"))
+        requests = list(Volunteer_ngo_request.objects.filter(sender = user_id.id, status ="Accept", req_type = "Event"))
+        for req in requests:
+            if req.date_vol > datetime.date.today():
+                profile_data['event_upcoming_requests'].append(req)
+            elif req.date_vol == datetime.date.today() and req.time_vol > datetime.datetime.now().time():
+                profile_data['event_upcoming_requests'].append(req)
+            else:
+                 profile_data['event_ongoing_requests'].append(req)
+
+        requests = list(Volunteer_ngo_request.objects.filter(sender = user_id.id, status ="Accept", req_type = "Project"))
+        for req in requests:
+            if req.date_vol > datetime.date.today():
+                profile_data['project_upcoming_requests'].append(req)
+            elif req.date_vol == datetime.date.today() and req.time_vol > datetime.datetime.now().time():
+                profile_data['project_upcoming_requests'].append(req)
+            else:
+                 profile_data['project_ongoing_requests'].append(req)
+
+        ngo_completed = list(Volunteer_ngo_request.objects.filter(sender =user_id.id , status = "NGO Complete", req_type = "NGO"))
         for req in ngo_completed:
             profile_data['ongoing_requests'].append(req)
 
-        if len(profile_data['upcoming_requests']) == 0:
+        ngo_completed = list(Volunteer_ngo_request.objects.filter(sender =user_id.id , status = "NGO Complete", req_type = "Event"))
+        for req in ngo_completed:
+            profile_data['event_ongoing_requests'].append(req)
+
+        ngo_completed = list(Volunteer_ngo_request.objects.filter(sender =user_id.id , status = "NGO Complete", req_type = "Project"))
+        for req in ngo_completed:
+            profile_data['project_ongoing_requests'].append(req)
+
+        if len(profile_data['upcoming_requests']) == 0 & len(profile_data['event_upcoming_requests']) == 0 & len(profile_data['event_upcoming_requests']) == 0:
             profile_data['is_upcomingrequests'] = False
         else:
             for req in profile_data['upcoming_requests']:
                     req.recepient=NGOProfile.objects.get(ngo_id=req.recepient).ngo_name
+            for req in profile_data['event_upcoming_requests']:
+                    req.recepient=Events.objects.get(id=req.recepient).event_name
+            for req in profile_data['project_upcoming_requests']:
+                    req.recepient=Projects.objects.get(id=req.recepient).project_name
 
-        if len(profile_data['ongoing_requests']) == 0:
+        if len(profile_data['ongoing_requests']) == 0 & len(profile_data['event_ongoing_requests']) == 0 & len(profile_data['event_ongoing_requests']) == 0:
             profile_data['is_ongoingrequests'] = False
         else:
             for req in profile_data['ongoing_requests']:
                     req.recepient=NGOProfile.objects.get(ngo_id=req.recepient).ngo_name
+            for req in profile_data['event_ongoing_requests']:
+                    req.recepient=Events.objects.get(id=req.recepient).event_name
+            for req in profile_data['project_ongoing_requests']:
+                    req.recepient=Projects.objects.get(id=req.recepient).project_name
+
 
         profile_data['is_pendingrequests'] = True
         profile_data['pending_requests'] = list(Volunteer_ngo_request.objects.filter(sender = user_id.id, status ="Pending"))
@@ -332,8 +367,16 @@ def volunteertable(request):
         else:
             for req in profile_data['pending_requests']:
                     req.recepient=NGOProfile.objects.get(ngo_id=req.recepient).ngo_name
-        return render_to_response('home/user/requests.html', profile_data, context)
 
+        profile_data['is_recur_pendingrequests'] = True
+        profile_data['recur_pending_requests'] = list(Recurring_request.objects.filter(sender = user_id.id, status ="Pending"))
+        if len(profile_data['recur_pending_requests']) == 0:
+            profile_data['is_recur_pendingrequests'] = False
+        else:
+            for req in profile_data['recur_pending_requests']:
+                    req.recepient=NGOProfile.objects.get(ngo_id=req.recepient).ngo_name
+
+        return render_to_response('home/user/requests.html', profile_data, context)
 
 @login_required
 def history(request):
@@ -528,7 +571,7 @@ def ngoevent(request):
             b=json.dumps(b)
             Events.objects.filter(id=a.id).update(activity_goal=b)
             return HttpResponse(b,content_type="application/text")
-        
+
         else:
             return HttpResponse("Failed",content_type="application/text")
     else:

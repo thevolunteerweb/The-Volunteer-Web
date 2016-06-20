@@ -7,7 +7,7 @@
       rel="stylesheet">
 {%endblock%}
 {%block body%}
-    
+	
 
 
 <div class="wrapper">
@@ -98,7 +98,7 @@ $(".anr.abort").click(function(){
     </thead>
     <tbody>
         {% for req in upcoming_requests %}
-    <tr id = "r{{req.id}}">
+    <tr id = "r{{req.id}}" style = "background-color: rgba(95, 138, 232, .5);">
         <td> {{req.date_time_req}} </td>
         <td> {{req.recepient}} </td>
         <td> {{req.date_vol}}</td>
@@ -110,7 +110,35 @@ $(".anr.abort").click(function(){
                 </button> 
         </td>
     </tr>
-    {% endfor %}        
+    {% endfor %}
+    {% for req in event_upcoming_requests %}
+    <tr id = "r{{req.id}}" style = "background-color: rgba(255, 195, 0, .5);">
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+        <td id={{req.id}} class="anrg td-actions text-right">
+                <button id= {{req.id}} class="anr abort btn btn-danbtn-raised btn-fab btn-fab-mini btn-round" data-toggle="modal" data-target="#confirm" rel = "tooltip" title = "Cancel">
+                Cancel
+                </button> 
+        </td>
+    </tr>
+    {% endfor %}
+    {% for req in project_upcoming_requests %}
+    <tr id = "r{{req.id}}" style = "background-color: rgba(248, 59, 50, .5);">
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+        <td id={{req.id}} class="anrg td-actions text-right">
+                <button id= {{req.id}} class="anr abort btn btn-danbtn-raised btn-fab btn-fab-mini btn-round" data-toggle="modal" data-target="#confirm" rel = "tooltip" title = "Cancel">
+                Cancel
+                </button> 
+        </td>
+    </tr>
+    {% endfor %}
     </tbody>
     </table>
     </div>
@@ -142,7 +170,7 @@ $(".anr.abort").click(function(){
     </thead>
     <tbody>
         {% for req in ongoing_requests %}
-    <tr id = "r{{req.id}}">
+    <tr id = "r{{req.id}}" style = "background-color: rgba(95, 138, 232, .5);">
         <td> {{req.date_time_req}} </td>
         <td> {{req.recepient}} </td>
         <td> {{req.date_vol}}</td>
@@ -154,7 +182,36 @@ $(".anr.abort").click(function(){
                 </button>
         </td>
     </tr>
-    {% endfor %}        
+    {% endfor %}
+    {% for req in event_ongoing_requests %}
+    <tr id = "r{{req.id}}" style = "background-color: rgba(255, 195, 0, .5);">
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+        <td id={{req.id}} class="anrg td-actions text-right">
+                 <button id= {{req.id}} class="anr complete btn btn-danbtn-raised btn-fab btn-fab-mini btn-round" data-toggle="modal" data-target="#confirm" rel = "tooltip" title = "Complete">
+                Complete
+                </button>
+        </td>
+    </tr>
+    {% endfor %}  
+    {% for req in project_ongoing_requests %}
+    <tr id = "r{{req.id}}" style = "background-color: rgba(248, 59, 50, .5);">
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+        <td id={{req.id}} class="anrg td-actions text-right">
+                 <button id= {{req.id}} class="anr complete btn btn-danbtn-raised btn-fab btn-fab-mini btn-round" data-toggle="modal" data-target="#confirm" rel = "tooltip" title = "Complete">
+                Complete
+                </button>
+        </td>
+    </tr>
+    {% endfor %}  
+    
 </tbody>
 </table>
 </div>
@@ -206,12 +263,53 @@ $(".anr.abort").click(function(){
  </div>
 
 {% else %}
-    <h2>No upcoming requests</h2>
+    <h2>No pending requests</h2>
 {%endif%}
 </div>
 </div>
 </div>
 </div>
+    
+<div class = "row">
+<div class = "col-md-10 col-md-offset-1">
+<div class = "card card-with-border">
+<div class = "title title-modern">Recurring Requests </div>
+<div class = "content">
+{% if is_recur_pendingrequests %}
+<div class = "table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+        <td><b>Sent at</b></td>
+        <td><b>NGO</b></td>
+        <td><b>Date of volunteering</b></td>
+        <td><b>Time of volunteering</b></td>
+        <td><b>Activity</b></td>
+        <td><b>Actions</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for req in recur_pending_requests %}
+    <tr id = "r{{req.id}}">
+        <td> {{req.date_time_req}} </td>
+        <td> {{req.recepient}} </td>
+        <td> {{req.date_vol}}</td>
+        <td> {{req.time_vol}}</td>
+        <td> {{req.activity}}</td>
+    </tr>
+    {% endfor %}        
+ </tbody>
+ </table>
+ </div>
+
+{% else %}
+    <h2>No pending recurring requests</h2>
+{%endif%}
+</div>
+</div>
+</div>
+</div>
+    
 </div>
 
 {%endblock%}
