@@ -339,7 +339,7 @@ def volunteertable(request):
         for req in ngo_completed:
             profile_data['project_ongoing_requests'].append(req)
 
-        if len(profile_data['upcoming_requests']) == 0 & len(profile_data['event_upcoming_requests']) == 0 & len(profile_data['event_upcoming_requests']) == 0:
+        if len(profile_data['upcoming_requests']) == 0 & len(profile_data['event_upcoming_requests']) == 0 & len(profile_data['project_upcoming_requests']) == 0:
             profile_data['is_upcomingrequests'] = False
         else:
             for req in profile_data['upcoming_requests']:
@@ -349,7 +349,7 @@ def volunteertable(request):
             for req in profile_data['project_upcoming_requests']:
                     req.recepient=Projects.objects.get(id=req.recepient).project_name
 
-        if len(profile_data['ongoing_requests']) == 0 & len(profile_data['event_ongoing_requests']) == 0 & len(profile_data['event_ongoing_requests']) == 0:
+        if len(profile_data['ongoing_requests']) == 0 & len(profile_data['event_ongoing_requests']) == 0 & len(profile_data['project_ongoing_requests']) == 0:
             profile_data['is_ongoingrequests'] = False
         else:
             for req in profile_data['ongoing_requests']:
