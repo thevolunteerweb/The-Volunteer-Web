@@ -158,6 +158,7 @@ def general(request):
             profile_data['total_users'] = User.objects.filter().count()
             profile_data['total_ngos'] = NGOProfile.objects.filter().count()
             profile_data['user_form'] = UserForm()
+            profile_data['array']=list(NGOProfile.objects.filter())
         return render_to_response('home/home.html', profile_data, context)
 
 @login_required

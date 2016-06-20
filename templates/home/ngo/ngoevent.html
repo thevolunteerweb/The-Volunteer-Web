@@ -68,8 +68,6 @@ $("#projectsub").click(function(){
         b.push($('[data-link="p'+$(this).val()+'"]').val())    
 
     })
-    alert(a)
-    alert(b)
     $.ajax({
         url : "/home/ngo/event/", // the endpoint
         type : "POST", // http method
@@ -152,7 +150,7 @@ $("#projectsub").click(function(){
 
                     <label class="checkbox checkbox-blue" for="checkbox1">
 
-                    <input type="checkbox" name="activities" value="{{option.activityname}}" class="pactivities" data-toggle="checkbox">
+                    <input type="checkbox" name="activities" value="{{option.activityname}}" class="activities" data-toggle="checkbox">
                        {{option.activityname}}
                        </label>
                        </div>
@@ -222,7 +220,7 @@ $("#projectsub").click(function(){
 
                     <label class="checkbox checkbox-blue" for="checkbox1">
 
-                    <input type="checkbox" name="pactivities" value="{{option.activityname}}" class="activities" data-toggle="checkbox">
+                    <input type="checkbox" name="pactivities" value="{{option.activityname}}" class="pactivities" data-toggle="checkbox">
                        {{option.activityname}}
                        </label>
                        </div>

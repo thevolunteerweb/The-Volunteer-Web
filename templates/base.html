@@ -81,6 +81,7 @@
                   <ul class="dropdown-menu">
                     <li><a data-toggle = "modal" data-target = "#indregister">as Individual</a></li>
                     <li><a data-toggle = "modal" data-target = "#ngoregister">as an NGO</a></li>
+                    <li><a data-toggle = "modal" data-target = "#ngoempregister">as an NGO employee</a></li>
 				
                   </ul>
                 </li>
@@ -213,6 +214,45 @@
     </div>
   </div>
 </div>
+<div class="modal modal-small fade" id="ngoempregister" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-center">Register with</h4>
+      </div>
+      <div class="modal-body">
+            <div class="social-area">
+                <a href="" class="btn btn-round btn-fill btn-social btn-facebook">
+                   <i class="fa fa-facebook-square"></i>
+                </a>
+                <a href="" class="btn btn-round btn-fill btn-social btn-google">
+                   <i class="fa fa-google-plus-square"></i>
+                </a>
+            </div>
+            <span class="divider"> or </span>
+<form id="ftwo" class="regform" action="/register/ngoemployee/" method="POST">
+{% csrf_token %}
+            {% for field in user_form %}
+
+                <div class="form-group">
+                {{ field }}
+                </div>
+            
+                {% endfor %}
+                <div class="form-group">
+                  <select id="id_ngo_domain" class="selectpicker" data-style="form-control" name="ngo_name">
+                {% for option in array %}
+                <option value="{{option.ngo_name}}">{{option.ngo_name}}</option>
+                {% endfor %}
+                </select>
+                </div>
+          <button id="two" type="button" class="submitreg btn btn-info btn-fill btn-block"> Register </button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
  
 </body>

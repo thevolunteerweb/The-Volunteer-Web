@@ -151,4 +151,40 @@ def update_ngoprofile(request):
             return render_to_response('registration/ngo.html', {'profile_form':profile_form,'array':array,'arrayact':arrayact}, context)
     	return HttpResponseRedirect("/")
 
+def ngoemp_register(request):
+    #boolean value for telling the template whether thr registration was successful
+    #initially set to false
+    registered = False
+    context = RequestContext(request)
+    if request.method == 'POST': #for processing the form data
+        user_form = UserForm(data=request.POST)
+        if user_form.is_valid():
+            #save user data to database
+            user = user_form.save()
+            #hashing password to allow us to edit the user pbjecto
+            user.set_password(user.password)
+            user.save()
+            #User Profile Instance
+            luser = authenticate(username = request.POST.get('username'), password = request.POST.get('password'))
+
+            if luser:
+                login(request, luser)
+                request.session['username'] = request.POST.get('username')
+            else:
+                return HttpResponse (request.POST.get('username'), request.POST.get('password'))
+
+            try:
+                NGOEmployeeProfile.objects.get(user_id=user.id)
+            except:
+                employee=NGOEmployeeProfile.objects.create(position="Employee",admin=False,user_id=user.id,ngo_id=NGOProfile.objects.get(ngo_name=request.POST.get('ngo_name').id))
+                registered = True
+            return HttpResponseRedirect('/register/ngoprofile/')
+
+        else:
+            print user_form.errors,
+    else:
+        #set forms blank if there is no HTTP POST
+        user_form = UserForm()
+        #render template depending on context
+    return render_to_response('registration/ngo_reg.html',{'user_form': user_form, 'registered': registered}, context)
 
