@@ -388,7 +388,7 @@ def editprofile(request):
     profile_data['address'] = UserProfile.objects.get(user = user_id).address
 
     if request.method == 'POST':
-       UserProfile.objects.get(user = user_id).update(address=request.POST.get('address'),skill_math = request.POST.get('math'),skill_ict = request.POST.get('ict'),skill_science = request.POST.get('science'),skill_programming = request.POST.get('programming'),skill_english = request.POST.get('english'),skill_sport = request.POST.get('sport'),skill_socialmediamarket = request.POST.get('marketing'))
+       UserProfile.objects.filter(user = user_id).update(address=request.POST.get('address'),skill_math = request.POST.get('math'),skill_ict = request.POST.get('ict'),skill_science = request.POST.get('science'),skill_programming = request.POST.get('programming'),skill_english = request.POST.get('english'),skill_sport = request.POST.get('sport'),skill_socialmediamarket = request.POST.get('marketing'))
        return HttpResponseRedirect("/home/editprofile")
 
     return render_to_response('home/user/editprofile.html', profile_data, context)
