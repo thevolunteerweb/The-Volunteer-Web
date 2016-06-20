@@ -178,13 +178,13 @@ def ngoemp_register(request):
             except:
                 employee=NGOEmployeeProfile.objects.create(position="Employee",admin=False,user_id=user.id,ngo_id=NGOProfile.objects.get(ngo_name=request.POST.get('ngo_name').id))
                 registered = True
-            return HttpResponseRedirect('/register/ngoprofile/')
+            return HttpResponseRedirect('/')
 
         else:
-            print user_form.errors,
+            print user_form.errors
     else:
         #set forms blank if there is no HTTP POST
         user_form = UserForm()
         #render template depending on context
-    return render_to_response('registration/ngo_reg.html',{'user_form': user_form, 'registered': registered}, context)
+        return render_to_response('registration/ngo_reg.html',{'user_form': user_form, 'registered': registered}, context)
 
