@@ -3,7 +3,7 @@ from Requests.forms import Volunteer_ngo_request_form, Recurring_request_form
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
-from Requests.models import Volunteer_ngo_request
+from Requests.models import Volunteer_ngo_request,Events,Projects
 from Registration.models import User,UserProfile
 
 @login_required
