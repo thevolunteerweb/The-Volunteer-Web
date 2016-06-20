@@ -68,7 +68,8 @@ $("#projectsub").click(function(){
         b.push($('[data-link="p'+$(this).val()+'"]').val())    
 
     })
-    alert($('#project_name').val())
+    alert(a)
+    alert(b)
     $.ajax({
         url : "/home/ngo/event/", // the endpoint
         type : "POST", // http method
